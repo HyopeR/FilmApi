@@ -1,0 +1,33 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.mainIntroDiv h1 {
+  font-size: 50px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.mainIntroDiv p {
+  font-size: 32px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.mainIntroDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-image: url("../images/space.jpg") !important;
+  background-size: cover;
+}
