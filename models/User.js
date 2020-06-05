@@ -29,7 +29,7 @@ const userSchema = new Schema({
     friends: [{type: Schema.Types.ObjectId, ref: 'Friends'}],
     lists: [
         {type: Schema.Types.ObjectId, ref: 'Film'},
-        {type: Schema.Types.ObjectId, ref: 'Series'},
+        // {type: Schema.Types.ObjectId, ref: 'Series'},
     ],
     rooms: [{type: Schema.Types.ObjectId, ref: 'Room'}]
 });

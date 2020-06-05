@@ -6,12 +6,12 @@ const User = require('../models/User');
 /* GET all users. */
 router.get('/', (req, res, next) => {
   const promise = User.find()
-      .populate({ path: 'friends'})
-      .populate({ path: 'lists' })
-      .populate({ path: 'rooms' });
+      // .populate({ path: 'friends'})
+      // .populate({ path: 'lists' })
+      // .populate({ path: 'rooms' });
 
-  promise.then((data) => {
-    res.json(data);
+  promise.then((user) => {
+    res.json(user);
   }).catch((error) => {
     res.json(error);
   });
@@ -20,13 +20,13 @@ router.get('/', (req, res, next) => {
 
 /* GET one user. */
 router.get('/:user_id', (req, res, next) => {
-  const promise = User.find({ _id: req.params.id })
+  const promise = User.find({ _id: req.params.user_id })
       .populate({ path: 'friends' })
       .populate({ path: 'lists' })
       .populate({ path: 'rooms' });
 
-  promise.then((data) => {
-    res.json(data);
+  promise.then((user) => {
+    res.json(user);
   }).catch((error) => {
     res.json(error);
   });
@@ -37,8 +37,8 @@ router.post('/', (req, res, next) => {
   const user = new User(req.body);
   const promise = user.save();
 
-  promise.then((data) => {
-    res.json(data);
+  promise.then((user) => {
+    res.json(user);
   }).catch((error) => {
     res.json(error);
   });
