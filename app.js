@@ -14,6 +14,7 @@ db.connect();
 
 const indexRouter = require('./routes/index');
 const categoriesRouter = require('./routes/categories');
+const contentsTypesRouter = require('./routes/contentsTypes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/categories', categoriesRouter);
+app.use('/contents/types', contentsTypesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
