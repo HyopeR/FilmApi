@@ -1,22 +1,10 @@
-const mongoose = require('mongoose');
+const {Pool, Client} = require('pg');
+const client = new Client({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
 
-module.exports = () => {
-    mongoose.connect(process.env.DB_STRING,
-        {
-            //useMongoClient: true,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false,
-            useCreateIndex: true,
-        });
-    mongoose.connection.on('open', () => {
-        console.log('MongoDB: Connected.');
-    });
-
-    mongoose.connection.on('error', (error) => {
-        console.log('MongoDB: Error', error);
-    });
-
-    //Mongoose Promise ayarlama.
-    mongoose.Promise = global.Promise;
-};
+module.exports = client;

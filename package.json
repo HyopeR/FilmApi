@@ -16,9 +16,9 @@
     "get-urls": "^9.2.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.17",
     "morgan": "~1.9.1",
     "node-fetch": "^2.6.0",
+    "pg": "^8.2.1",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {

@@ -1,35 +1,9 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const db = require('../helpers/db');
 
-const seriesSchema = new Schema({
-    seriesName: {
-        type: Schema.Types.String,
-        required: true
-    },
-    imdbScore: {
-        type: Schema.Types.Number,
-        required: true
-    },
-    episodes: [
-        // {
-        //     season: [{
-        //         episodeName: {
-        //             type: Schema.Types.String,
-        //             required: true
-        //         },
-        //         time: {
-        //             type: Schema.Types.String,
-        //             required: true
-        //         },
-        //         introStartTime: Schema.Types.Number,
-        //         introFinishTime: Schema.Types.Number,
-        //         comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
-        //     }]
-        // }
-    ],
-
-    category: [{type: Schema.Types.ObjectId, ref: 'Category'}],
-    score: {type: Schema.Types.ObjectId, ref: 'Score'}
-});
-
-module.exports = mongoose.model('Series', seriesSchema);
+let Series = function(content_id, series_season, tr_episode_name, eng_episode_name, episode_number){
+    this.content_id = content_id;
+    this.series_season = series_season;
+    this.tr_episode_name = tr_episode_name;
+    this.eng_episode_name = eng_episode_name;
+    this.episode_number = episode_number;
+};
