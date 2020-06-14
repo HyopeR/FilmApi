@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ContentsTypes = require('../models/ContentsTypes');
 
-/* GET all categories */
+/* GET all content types */
 router.get('/', (req, res, next) => {
     ContentsTypes.getAll((error, result) => {
         if(error)
@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
 });
 
 
-/* GET by id categories */
+/* GET by id content type */
 router.get('/:id', (req, res, next) => {
     const content_type_id = req.params.id;
     ContentsTypes.getOne(content_type_id, (error, result) => {
@@ -25,7 +25,7 @@ router.get('/:id', (req, res, next) => {
     })
 });
 
-/* Create categories */
+/* Create content type */
 router.post('/', (req, res, next) => {
     const { type_name } = req.body;
     const newContentType = new ContentsTypes(type_name);
@@ -38,7 +38,7 @@ router.post('/', (req, res, next) => {
     })
 });
 
-/* Update categories */
+/* Update content type */
 router.put('/:id', (req, res, next) => {
     const content_type_id = req.params.id;
     const { type_name } = req.body;
@@ -52,7 +52,7 @@ router.put('/:id', (req, res, next) => {
     })
 });
 
-/* Delete categories */
+/* Delete content type */
 router.delete('/:id', (req, res, next) => {
     const content_type_id = req.params.id;
     ContentsTypes.delete(content_type_id, (error, result) => {
