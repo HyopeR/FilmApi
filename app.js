@@ -14,9 +14,10 @@ db.connect();
 
 const indexRouter = require('./routes/index');
 const categoriesRouter = require('./routes/categories');
+const contentsCategoriesRouter = require('./routes/contentsCategories');
 const contentsTypesRouter = require('./routes/contentsTypes');
-const seriesRouter = require('./routes/series');
 const contentsDetailsRouter = require('./routes/contentsDetails');
+const seriesRouter = require('./routes/series');
 
 const app = express();
 
@@ -32,9 +33,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/categories', categoriesRouter);
+app.use('/contents/categories', contentsCategoriesRouter);
 app.use('/contents/types', contentsTypesRouter);
-app.use('/series', seriesRouter);
 app.use('/contents/details', contentsDetailsRouter);
+app.use('/series', seriesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

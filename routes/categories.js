@@ -62,35 +62,35 @@ router.delete('/:id', (req, res, next) => {
     })
 });
 
-// let query = `SELECT
-//     contents_categories.content_id as id,
-//     contents.tr_name,
-//     contents.eng_name,
-//     contents.imdb_score,
-//     contents.active,
-//     contents.created_at,
-//     contents.type_id,
-//     contents_types.type_name,
-//     array_agg(categories.name) as categories
-//
-//     FROM contents
-//         LEFT JOIN contents_types
-//         ON contents.type_id = contents_types.id
-//         LEFT JOIN contents_categories
-//         ON contents.id = contents_categories.content_id
-//         LEFT JOIN categories
-//         ON contents_categories.category_id = categories.id
-//
-//     GROUP BY
-//         contents_categories.content_id,
-//         contents.type_id,
-//         contents.tr_name,
-//         contents.eng_name,
-//         contents.imdb_score,
-//         contents.active,
-//         contents.created_at,
-//         contents_types.type_name,
-//         contents_categories.content_id
-//     `;
+let query = `SELECT
+    contents_categories.content_id as id,
+    contents.tr_name,
+    contents.eng_name,
+    contents.imdb_score,
+    contents.active,
+    contents.created_at,
+    contents.type_id,
+    contents_types.type_name,
+    array_agg(categories.name) as categories
+
+    FROM contents
+        LEFT JOIN contents_types
+        ON contents.type_id = contents_types.id
+        LEFT JOIN contents_categories
+        ON contents.id = contents_categories.content_id
+        LEFT JOIN categories
+        ON contents_categories.category_id = categories.id
+
+    GROUP BY
+        contents_categories.content_id,
+        contents.type_id,
+        contents.tr_name,
+        contents.eng_name,
+        contents.imdb_score,
+        contents.active,
+        contents.created_at,
+        contents_types.type_name,
+        contents_categories.content_id
+    `;
 
 module.exports = router;
