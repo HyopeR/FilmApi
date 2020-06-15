@@ -35,7 +35,7 @@ Series.getContentAllSeason = (content_id, result) => {
 
     let query = `SELECT series_season, content_id,
         array_agg( json_build_object(
-        'episode_number', episode_number,
+                  'episode_number', episode_number,
                   'tr_episode_name', tr_episode_name,
                   'eng_episode_name', eng_episode_name
         )) as episodes
