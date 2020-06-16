@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ContentsCategories = require('../models/ContentsCategories');
 
-/* GET all content types */
+/* GET all content categories */
 router.get('/', (req, res, next) => {
     ContentsCategories.getAll((error, result) => {
         if(error)
@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
 });
 
 
-/* GET by id content type */
+/* GET by id content category */
 router.get('/:content_id', (req, res, next) => {
     const content_id = req.params.content_id;
 
@@ -26,7 +26,7 @@ router.get('/:content_id', (req, res, next) => {
     })
 });
 
-/* Create content type */
+/* Create content category */
 router.post('/', (req, res, next) => {
     const { content_id, category_id } = req.body;
     const newContentCategory = new ContentsCategories(content_id, category_id);
@@ -39,7 +39,7 @@ router.post('/', (req, res, next) => {
     })
 });
 
-/* Update content type */
+/* Update content category */
 router.put('/:content_id/:category_id', (req, res, next) => {
     const param_content_id = req.params.content_id;
     const param_category_id = req.params.category_id;
@@ -55,7 +55,7 @@ router.put('/:content_id/:category_id', (req, res, next) => {
     })
 });
 
-/* Delete content type */
+/* Delete content category */
 router.delete('/:content_id/:category_id', (req, res, next) => {
     const param_content_id = req.params.content_id;
     const param_category_id = req.params.category_id;

@@ -35,13 +35,15 @@ Series.getContentAllSeason = (content_id, result) => {
 
     let query = `SELECT series_season, content_id,
         array_agg( json_build_object(
+                  'episode_id', id,
                   'episode_number', episode_number,
                   'tr_episode_name', tr_episode_name,
                   'eng_episode_name', eng_episode_name
         )) as episodes
-    FROM series 
-    WHERE content_id = ${content_id}
-    GROUP BY series_season, content_id`;
+    FROM (SELECT * FROM series ORDER BY series_season, episode_number) as puppet_series 
+    WHERE puppet_series.content_id = ${content_id}
+    GROUP BY series_season, content_id
+    ORDER BY series_season`;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
