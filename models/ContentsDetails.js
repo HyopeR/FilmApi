@@ -1,6 +1,6 @@
 const db = require('../helpers/db');
 
-let ContentsDetails = function(content_id, series_id, url, time, intro_start_time = null, intro_finish_time = null){
+let ContentsDetails = function(content_id, series_id = null, url, time, intro_start_time = null, intro_finish_time = null){
     this.content_id = content_id;
     this.series_id = series_id;
     this.url = url;
@@ -10,7 +10,21 @@ let ContentsDetails = function(content_id, series_id, url, time, intro_start_tim
 };
 
 ContentsDetails.getAll = result => {
-    let query = `SELECT * FROM contents_details`;
+    let query = `SELECT contents_details.id,
+    contents_details.content_id,
+    contents_details.series_id,
+    contents_details.url,
+    contents_details.time,
+    contents_details.intro_start_time,
+    contents_details.intro_finish_time,
+    contents_details.created_at,
+    series.series_season,
+    series.tr_episode_name,
+    series.eng_episode_name,
+    series.episode_number
+    FROM contents_details
+    LEFT JOIN series ON contents_details.series_id = series.id
+    `;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -20,13 +34,61 @@ ContentsDetails.getAll = result => {
 };
 
 ContentsDetails.getOne = (content_detail_id, result) => {
-    let query = `SELECT * FROM contents_details WHERE id = ${content_detail_id}`;
+    let query = `SELECT contents_details.id,
+    contents_details.content_id,
+    contents_details.series_id,
+    contents_details.url,
+    contents_details.time,
+    contents_details.intro_start_time,
+    contents_details.intro_finish_time,
+    contents_details.created_at,
+    series.series_season,
+    series.tr_episode_name,
+    series.eng_episode_name,
+    series.episode_number
+    FROM contents_details
+    LEFT JOIN series ON contents_details.series_id = series.id
+    WHERE contents_details.id = ${content_detail_id}`;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
 
         if(res.rows.length > 0)
             result(null, res.rows[0]);
+        else
+            result(null, { notification: 'Not available ID.' });
+    });
+};
+
+ContentsDetails.getOneContents = (content_id, result) => {
+    let query = `SELECT series_season, contents_details.content_id, contents.tr_name, contents.eng_name,
+        array_agg( json_build_object(
+            'content_detail_id', contents_details.id,
+            'series_id', series_id,
+            'url', url,
+            'episode_number', episode_number,
+            'tr_episode_name', tr_episode_name,
+            'eng_episode_name', eng_episode_name,
+            'time', time,
+            'intro_start_time', intro_start_time,
+            'intro_finish_time', intro_finish_time,
+            'created_at', contents_details.created_at
+        )) as episodes
+        
+        FROM contents_details
+        LEFT JOIN (SELECT * FROM series ORDER BY series_season, episode_number) as puppet_series
+        ON contents_details.series_id = puppet_series.id
+        LEFT JOIN contents
+        ON contents_details.content_id = contents.id
+        
+        WHERE contents_details.content_id = ${content_id}
+        GROUP BY puppet_series.series_season, contents_details.content_id, contents.tr_name, contents.eng_name`;
+    db.query(query, (err, res) => {
+        if (err)
+            result(null, err);
+
+        if(res.rows.length > 0)
+            result(null, res.rows);
         else
             result(null, { notification: 'Not available ID.' });
     });

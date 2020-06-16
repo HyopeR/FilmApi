@@ -26,7 +26,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 /* GET one content all season episode */
-router.get('/seasonAll/:content_id', (req, res, next) => {
+router.get('/allSeason/:content_id', (req, res, next) => {
 
     const content_id = req.params.content_id;
     Series.getContentAllSeason(content_id, (error, result) => {
@@ -39,7 +39,7 @@ router.get('/seasonAll/:content_id', (req, res, next) => {
 });
 
 /* GET one content one season episode */
-router.get('/seasonOne/:content_id/:series_season', (req, res, next) => {
+router.get('/oneSeason/:content_id/:series_season', (req, res, next) => {
 
     const {content_id, series_season} = req.params;
     Series.getContentOneSeason(content_id, series_season, (error, result) => {

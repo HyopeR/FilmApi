@@ -56,7 +56,10 @@ Series.getContentAllSeason = (content_id, result) => {
 };
 
 Series.getContentOneSeason = (content_id, series_season, result) => {
-    let query = `SELECT * FROM series WHERE content_id = ${content_id} AND series_season = ${series_season}`;
+    let query = `SELECT * FROM series 
+    WHERE content_id = ${content_id} AND series_season = ${series_season}
+    ORDER BY series_season, episode_number
+    `;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);

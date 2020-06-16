@@ -25,6 +25,17 @@ router.get('/:id', (req, res, next) => {
     })
 });
 
+/* GET with content_id all episodes and seasons data */
+router.get('/series/:content_id', (req, res, next) => {
+    const content_id = req.params.content_id;
+    ContentsDetails.getOneContents(content_id, (error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
+
 /* Create content detail */
 router.post('/', (req, res, next) => {
     const { content_id, series_id, url, time, intro_start_time, intro_finish_time } = req.body;
