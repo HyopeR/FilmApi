@@ -54,7 +54,7 @@ const getQueryRoofDynamic = (parameterString) => {
                     'intro_start_time', intro_start_time,
                     'intro_finish_time', intro_finish_time,
                     'created_at', contents_details.created_at
-                )) as episodes
+                ) ORDER BY episode_number ASC ) as episodes
                 
         FROM contents_details
         LEFT JOIN (
@@ -66,6 +66,9 @@ const getQueryRoofDynamic = (parameterString) => {
         GROUP BY 
             contents_details.content_id,
             puppet_series.series_season
+
+        ORDER BY
+            puppet_series.series_season DESC
         ) AS puppet_contents_details
     ON contents.id = puppet_contents_details.content_id
     
