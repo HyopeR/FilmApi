@@ -9,35 +9,23 @@ let Contents = function(type_id, tr_name, eng_name, imdb_score, active = true){
 };
 
 const getQueryRoofDynamic = (parameterString) => {
-    let createdQuery = `SELECT
-    contents.id,
-    contents.tr_name,
-    contents.eng_name,
-    contents.imdb_score,
-    contents.active,
-    contents.created_at,
-    contents.type_id,
-    contents_types.type_name,
-    array_agg( json_build_object ( 
-            'category_id', categories.id,
-            'category_name', categories.name 
-    )) as categories
+    let createdQuery = `SELECT 
+        contents.id,
+        contents.type_id,
+        contents_types.type_name,
+        contents.tr_name,
+        contents.eng_name,
+        contents.imdb_score,
+        contents.active,
+        contents.created_at,
+        puppet_episodes.episodes,
+        puppet_categories.categories
+        
+        FROM contents
 
-    FROM contents
-        LEFT JOIN contents_types
-        ON contents.type_id = contents_types.id
-        LEFT JOIN  (SELECT *
-        FROM contents_categories
-        ORDER BY category_id) AS puppet_contents_category
-        ON contents.id = puppet_contents_category.content_id
-        LEFT JOIN categories
-        ON puppet_contents_category.category_id = categories.id
-    `
-    +
-        parameterString
-    +
-    `
-    GROUP BY
+    LEFT JOIN 
+    (
+        SELECT 
         contents.id,
         contents.type_id,
         contents.tr_name,
@@ -45,14 +33,115 @@ const getQueryRoofDynamic = (parameterString) => {
         contents.imdb_score,
         contents.active,
         contents.created_at,
-        contents_types.type_name
-    `;
+        array_agg ( 
+            json_build_object ( 
+                COALESCE( puppet_contents_details.series_season, 0 ), 
+                puppet_contents_details.episodes 
+        )) as episodes
+        
+        FROM contents
+        LEFT JOIN
+        (
+        SELECT contents_details.content_id, puppet_series.series_season,
+                array_agg( json_build_object(
+                    'content_detail_id', contents_details.id,
+                    'series_id', series_id,
+                    'url', url,
+                    'episode_number', episode_number,
+                    'tr_episode_name', tr_episode_name,
+                    'eng_episode_name', eng_episode_name,
+                    'time', time,
+                    'intro_start_time', intro_start_time,
+                    'intro_finish_time', intro_finish_time,
+                    'created_at', contents_details.created_at
+                )) as episodes
+                
+        FROM contents_details
+        LEFT JOIN (
+            SELECT * 
+            FROM series 
+            ORDER BY content_id, series_season, episode_number ASC) as puppet_series
+        ON contents_details.series_id = puppet_series.id
+        
+        GROUP BY 
+            contents_details.content_id,
+            puppet_series.series_season
+        ) AS puppet_contents_details
+    ON contents.id = puppet_contents_details.content_id
+    
+    GROUP BY
+        contents.id,
+        contents.type_id,
+        contents.tr_name,
+        contents.eng_name,
+        contents.imdb_score,
+        contents.active,
+        contents.created_at
+    ) AS puppet_episodes
+    ON contents.id = puppet_episodes.id
+    
+    LEFT JOIN 
+    (
+        SELECT 
+            contents.id,
+            contents.type_id,
+            contents.tr_name,
+            contents.eng_name,
+            contents.imdb_score,
+            contents.active,
+            contents.created_at,
+            array_agg(
+                json_build_object(
+                    'category_id', puppet_contents_categories.category_id,
+                    'category_name', puppet_contents_categories.name
+            )) as categories
+        FROM contents
+        LEFT JOIN 
+        (
+        SELECT contents.id as content_id, categories.id as category_id, categories.name
+        FROM contents
+        
+        LEFT JOIN contents_categories
+        ON contents.id = contents_categories.content_id
+        
+        LEFT JOIN categories
+        ON contents_categories.category_id = categories.id
+        
+        LEFT JOIN series
+        ON contents.id = series.content_id
+        
+        GROUP BY contents.id, categories.id, categories.name
+        ORDER BY contents.id, categories.id
+    ) AS puppet_contents_categories
+        ON contents.id = puppet_contents_categories.content_id
+        
+        GROUP BY
+            contents.id,
+            contents.type_id,
+            contents.tr_name,
+            contents.eng_name,
+            contents.imdb_score,
+            contents.active,
+            contents.created_at
+        ) AS puppet_categories
+    ON contents.id = puppet_categories.id
+    
+    LEFT JOIN contents_types
+    ON contents.type_id = contents_types.id
+    `
+        +
+            parameterString
+        +
+    `
+    ORDER BY id
+    `
+;
 
     return createdQuery;
 };
 
 Contents.getAll = result => {
-    let query = getQueryRoofDynamic(``);
+    let query = getQueryRoofDynamic(``, ``);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -62,7 +151,8 @@ Contents.getAll = result => {
 };
 
 Contents.getAllActive = result => {
-    let query = getQueryRoofDynamic(`WHERE contents.active = true`);
+    let query = getQueryRoofDynamic(
+        `WHERE contents.active = true`);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -72,7 +162,8 @@ Contents.getAllActive = result => {
 };
 
 Contents.getOne = (content_id, result) => {
-    let query = getQueryRoofDynamic(`WHERE contents.id = ${content_id}`);
+    let query = getQueryRoofDynamic(
+        `WHERE contents.id = ${content_id}`);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -86,7 +177,8 @@ Contents.getOne = (content_id, result) => {
 
 Contents.getFilterType = (content_type_id, result) => {
 
-    let query = getQueryRoofDynamic(`WHERE contents.active = true AND contents.type_id = ${content_type_id}`);
+    let query = getQueryRoofDynamic(
+        `WHERE contents.active = true AND contents.type_id = ${content_type_id}`);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -99,8 +191,9 @@ Contents.getFilterType = (content_type_id, result) => {
 };
 
 Contents.getFilterCategory = (category_id, result) => {
-
-    let query = getQueryRoofDynamic(`WHERE contents.active = true AND puppet_contents_category.category_id = ${category_id}`);
+    let query = getQueryRoofDynamic(
+        `WHERE contents.active = true
+        AND contents.id IN (SELECT content_id FROM contents_categories WHERE category_id = ${category_id})`);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -114,8 +207,10 @@ Contents.getFilterCategory = (category_id, result) => {
 
 Contents.getFilterSpecial = (content_type_id, category_id, result) => {
 
-    let query = getQueryRoofDynamic(`WHERE contents.active = true AND contents.type_id = ${content_type_id}
-    AND puppet_contents_category.category_id = ${category_id}`);
+    let query = getQueryRoofDynamic(
+        `WHERE contents.active = true 
+        AND contents.type_id = ${content_type_id}
+        AND contents.id IN (SELECT content_id FROM contents_categories WHERE category_id = ${category_id})`);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
