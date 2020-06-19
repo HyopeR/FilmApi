@@ -33,11 +33,10 @@ const getQueryRoofDynamic = (parameterString) => {
         contents.imdb_score,
         contents.active,
         contents.created_at,
-        array_agg ( 
-            json_build_object ( 
+        json_object_agg ( 
                 COALESCE( puppet_contents_details.series_season, 0 ), 
                 puppet_contents_details.episodes 
-        )) as episodes
+        ) as episodes
         
         FROM contents
         LEFT JOIN
