@@ -143,7 +143,7 @@ const getQueryRoofDynamic = (parameterString) => {
 };
 
 Contents.getAll = result => {
-    let query = getQueryRoofDynamic(``, ``);
+    let query = getQueryRoofDynamic(``);
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -265,7 +265,7 @@ Contents.update = (content_id, newContent, result) => {
     });
 };
 
-Contents.inActive = (content_id, result) => {
+Contents.deactivate = (content_id, result) => {
     let query = `UPDATE contents 
     SET active = false
     WHERE id = ${content_id} RETURNING *`;
@@ -276,7 +276,7 @@ Contents.inActive = (content_id, result) => {
         if(res.rows.length > 0)
             result(null, res.rows[0]);
         else
-            result(null, { notification: 'Deletion failed.' });
+            result(null, { notification: 'Deactivated failed.' });
     });
 };
 

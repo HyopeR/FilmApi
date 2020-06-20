@@ -106,10 +106,10 @@ router.put('/:id', (req, res, next) => {
     })
 });
 
-/* Active off content */
+/* Deactivate content */
 router.delete('/:id', (req, res, next) => {
     const content_id = req.params.id;
-    Contents.inActive(content_id, (error, result) => {
+    Contents.deactivate(content_id, (error, result) => {
         if(error)
             res.json(error);
         else
