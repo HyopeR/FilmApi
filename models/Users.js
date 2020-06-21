@@ -10,7 +10,46 @@ let Users = function(username, name, surname, email, password, active = true){
 };
 
 Users.getAll = result => {
-    let query = `SELECT * FROM users`;
+    let query = `
+    SELECT 
+        users.id,
+        users.username,
+        users.name,
+        users.surname,
+        users.password,
+        users.active,
+        users.created_at,
+        COALESCE( lists, ARRAY[]::json[] ) as lists
+    FROM users
+    LEFT JOIN 
+    (
+        SELECT 
+            users_lists.user_id,
+            array_agg( 
+            json_build_object(
+            'id', contents.id,
+            'type_id', contents.type_id,
+            'type_name', contents_types.type_name,
+            'tr_name', contents.tr_name,
+            'eng_name', contents.eng_name,
+            'imdb_score', contents.imdb_score,
+            'active', contents.active,
+            'created_at', contents.created_at
+        )) as lists
+        FROM users_lists
+        
+        LEFT JOIN contents
+        ON users_lists.content_id = contents.id
+        
+        LEFT JOIN contents_types
+        ON contents.type_id = contents_types.id
+        
+        GROUP BY users_lists.user_id
+        ORDER BY users_lists.user_id
+    ) AS lists
+    
+    ON users.id = lists.user_id
+    `;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -20,7 +59,47 @@ Users.getAll = result => {
 };
 
 Users.getOne = (user_id, result) => {
-    let query = `SELECT * FROM users WHERE id = ${user_id}`;
+    let query = `
+    SELECT 
+        users.id,
+        users.username,
+        users.name,
+        users.surname,
+        users.password,
+        users.active,
+        users.created_at,
+        COALESCE( lists, ARRAY[]::json[] ) as lists
+    FROM users
+    LEFT JOIN 
+    (
+        SELECT 
+            users_lists.user_id,
+            array_agg( 
+            json_build_object(
+            'id', contents.id,
+            'type_id', contents.type_id,
+            'type_name', contents_types.type_name,
+            'tr_name', contents.tr_name,
+            'eng_name', contents.eng_name,
+            'imdb_score', contents.imdb_score,
+            'active', contents.active,
+            'created_at', contents.created_at
+        )) as lists
+        FROM users_lists
+        
+        LEFT JOIN contents
+        ON users_lists.content_id = contents.id
+        
+        LEFT JOIN contents_types
+        ON contents.type_id = contents_types.id
+        
+        GROUP BY users_lists.user_id
+        ORDER BY users_lists.user_id
+    ) AS lists
+    
+    ON users.id = lists.user_id
+    WHERE users.id = ${user_id}
+    `;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
