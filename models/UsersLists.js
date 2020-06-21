@@ -6,7 +6,43 @@ let UsersLists = function(user_id, content_id){
 };
 
 UsersLists.getAll = result => {
-    let query = `SELECT * FROM users_lists`;
+    let query = `SELECT
+        users.id,
+        users.username,
+        users.name,
+        users.surname,
+        array_agg( 
+            json_build_object(
+            'id', contents.id,
+            'type_id', contents.type_id,
+            'type_name', contents_types.type_name,
+            'tr_name', contents.tr_name,
+            'eng_name', contents.eng_name,
+            'imdb_score', contents.imdb_score,
+            'active', contents.active,
+            'created_at', contents.created_at
+        )) as lists
+    FROM users 
+    
+    LEFT JOIN users_lists
+    ON users.id = users_lists.user_id
+    
+    LEFT JOIN contents
+    ON users_lists.content_id = contents.id
+    
+    LEFT JOIN contents_types
+    ON contents.type_id = contents_types.id
+    
+    WHERE users.id IN (SELECT user_id FROM users_lists)
+    
+    GROUP BY
+        users.id,
+        users.username,
+        users.name,
+        users.surname
+    
+    ORDER BY users.id   
+    `;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -16,7 +52,43 @@ UsersLists.getAll = result => {
 };
 
 UsersLists.getOne = (user_id, result) => {
-    let query = `SELECT * FROM users_lists WHERE user_id = ${user_id}`;
+    let query = `SELECT
+        users.id,
+        users.username,
+        users.name,
+        users.surname,
+        array_agg( 
+            json_build_object(
+            'id', contents.id,
+            'type_id', contents.type_id,
+            'type_name', contents_types.type_name,
+            'tr_name', contents.tr_name,
+            'eng_name', contents.eng_name,
+            'imdb_score', contents.imdb_score,
+            'active', contents.active,
+            'created_at', contents.created_at
+        )) as lists
+    FROM users 
+    
+    LEFT JOIN users_lists
+    ON users.id = users_lists.user_id
+    
+    LEFT JOIN contents
+    ON users_lists.content_id = contents.id
+    
+    LEFT JOIN contents_types
+    ON contents.type_id = contents_types.id
+    
+    WHERE users.id IN (SELECT user_id FROM users_lists) AND
+    users.id = ${user_id}
+    
+    GROUP BY
+        users.id,
+        users.username,
+        users.name,
+        users.surname
+    
+    ORDER BY users.id`;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -43,26 +115,6 @@ UsersLists.create = (newUserList, result) => {
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
-    });
-};
-
-UsersLists.update = (param_user_id, param_content_id, newUserList, result) => {
-    let query = `UPDATE users_lists 
-    SET user_id = $1, 
-        content_id = $2
-    WHERE user_id = ${param_user_id} AND content_id = ${param_content_id} RETURNING *`;
-
-    const { user_id, content_id } = newUserList;
-
-    db.query(query, [user_id, content_id], (err, res) => {
-        if (err)
-            result(null, err);
-
-        if(res.rows.length > 0)
-            result(null, res.rows[0]);
-        else
-            result(null, { notification: 'Update failed.' });
-
     });
 };
 
