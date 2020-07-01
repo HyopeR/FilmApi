@@ -23,6 +23,7 @@ const usersRouter = require('./routes/users');
 const usersListsRouter = require('./routes/usersLists');
 const friendsRouter = require('./routes/friends');
 const roomsRouter = require('./routes/rooms');
+const usersRooms = require('./routes/usersRooms');
 
 const app = express();
 
@@ -38,13 +39,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/categories', categoriesRouter);
+
 app.use('/contents/categories', contentsCategoriesRouter);
 app.use('/contents/types', contentsTypesRouter);
 app.use('/contents/details', contentsDetailsRouter);
-app.use('/series', seriesRouter);
 app.use('/contents', contentsRouter);
+app.use('/series', seriesRouter);
+
+app.use('/users/lists', usersListsRouter);
+app.use('/users/rooms', usersRooms);
 app.use('/users', usersRouter);
-app.use('/lists', usersListsRouter);
+
 app.use('/friends', friendsRouter);
 app.use('/rooms', roomsRouter);
 
