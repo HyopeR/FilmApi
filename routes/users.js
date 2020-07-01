@@ -13,6 +13,15 @@ router.get('/', (req, res, next) => {
     })
 });
 
+/* GET all active users */
+router.get('/active', (req, res, next) => {
+    Users.getAllActive((error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
 
 /* GET by id user */
 router.get('/:id', (req, res, next) => {

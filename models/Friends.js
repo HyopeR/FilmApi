@@ -50,6 +50,7 @@ Friends.create = (newFriend, result) => {
 
 Friends.update = (requester_id, recipient_id, updateFriend, result) => {
 
+    // status, created_at = updateFriend
     let query = `UPDATE friends 
     SET status = $1,
         updated_at = $2
