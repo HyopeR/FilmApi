@@ -13,6 +13,17 @@ router.get('/', (req, res, next) => {
     })
 });
 
+/* GET one user all Friends */
+router.get('/user/:user_id', (req, res, next) => {
+    const user_id = req.params.user_id;
+    Friends.getAllOneUserFriends(user_id, (error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
+
 /* GET by requester_id and recipient_id Friends */
 router.get('/:requester_id/:recipient_id', (req, res, next) => {
     const requester_id = req.params.requester_id;
