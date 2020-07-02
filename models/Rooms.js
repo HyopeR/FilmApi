@@ -6,7 +6,37 @@ let Rooms = function(name, active = true){
 };
 
 Rooms.getAll = result => {
-    let query = `SELECT * FROM rooms`;
+    let query = `
+    SELECT 
+        rooms.id,
+        rooms.name,
+        rooms.active,
+        rooms.created_at,
+        array_agg( json_build_object(
+                            'id', users.id,
+                            'username', users.username,
+                            'name', users.name,
+                            'surname', users.surname,
+                            'authority', users_rooms.authority,
+                            'joined_at', users_rooms.created_at
+        ) ORDER BY users.id ASC ) as user_list
+        
+        FROM rooms
+        
+        LEFT JOIN users_rooms
+        ON rooms.id = users_rooms.room_id
+        
+        LEFT JOIN users
+        ON users_rooms.user_id = users.id
+        
+        GROUP BY 
+            rooms.id, 
+            rooms.name,
+            rooms.active,
+            rooms.created_at
+        
+        ORDER BY rooms.id
+    `;
 
     db.query(query, (err, res) => {
         if (err)
@@ -17,7 +47,38 @@ Rooms.getAll = result => {
 };
 
 Rooms.getOne = (room_id, result) => {
-    let query = `SELECT * FROM rooms WHERE id = ${room_id}`;
+    let query = `
+     SELECT 
+        rooms.id,
+        rooms.name,
+        rooms.active,
+        rooms.created_at,
+        array_agg( json_build_object(
+                            'id', users.id,
+                            'username', users.username,
+                            'name', users.name,
+                            'surname', users.surname,
+                            'authority', users_rooms.authority,
+                            'joined_at', users_rooms.created_at
+        ) ORDER BY users.id ASC ) as user_list
+        
+        FROM rooms
+        
+        LEFT JOIN users_rooms
+        ON rooms.id = users_rooms.room_id
+        
+        LEFT JOIN users
+        ON users_rooms.user_id = users.id
+        
+        WHERE rooms.id = ${room_id}
+        GROUP BY 
+            rooms.id, 
+            rooms.name,
+            rooms.active,
+            rooms.created_at
+        
+        ORDER BY rooms.id
+     `;
 
     db.query(query, (err, res) => {
         if (err)
