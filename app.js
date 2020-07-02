@@ -14,16 +14,20 @@ db.connect();
 
 const indexRouter = require('./routes/index');
 const categoriesRouter = require('./routes/categories');
+
 const contentsCategoriesRouter = require('./routes/contentsCategories');
 const contentsTypesRouter = require('./routes/contentsTypes');
 const contentsDetailsRouter = require('./routes/contentsDetails');
-const seriesRouter = require('./routes/series');
 const contentsRouter = require('./routes/contents');
-const usersRouter = require('./routes/users');
+const seriesRouter = require('./routes/series');
+
 const usersListsRouter = require('./routes/usersLists');
+const usersRooms = require('./routes/usersRooms');
+const usersScores = require('./routes/usersScores');
+const usersRouter = require('./routes/users');
+
 const friendsRouter = require('./routes/friends');
 const roomsRouter = require('./routes/rooms');
-const usersRooms = require('./routes/usersRooms');
 
 const app = express();
 
@@ -48,6 +52,7 @@ app.use('/series', seriesRouter);
 
 app.use('/users/lists', usersListsRouter);
 app.use('/users/rooms', usersRooms);
+app.use('/users/scores', usersScores);
 app.use('/users', usersRouter);
 
 app.use('/friends', friendsRouter);
