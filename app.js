@@ -24,6 +24,7 @@ const seriesRouter = require('./routes/series');
 const usersListsRouter = require('./routes/usersLists');
 const usersRooms = require('./routes/usersRooms');
 const usersScores = require('./routes/usersScores');
+const usersComments = require('./routes/usersComments');
 const usersRouter = require('./routes/users');
 
 const friendsRouter = require('./routes/friends');
@@ -53,6 +54,7 @@ app.use('/series', seriesRouter);
 app.use('/users/lists', usersListsRouter);
 app.use('/users/rooms', usersRooms);
 app.use('/users/scores', usersScores);
+app.use('/users/comments', usersComments);
 app.use('/users', usersRouter);
 
 app.use('/friends', friendsRouter);

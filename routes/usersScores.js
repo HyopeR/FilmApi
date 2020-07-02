@@ -13,6 +13,18 @@ router.get('/', (req, res, next) => {
     })
 });
 
+/* GET one content's mean users scores */
+router.get('/content/:content_id', (req, res, next) => {
+    const content_id = req.params.content_id;
+
+    UsersScores.getContentMeanScore(content_id, (error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
+
 
 /* GET by id users scores row */
 router.get('/:user_id/:content_id', (req, res, next) => {

@@ -17,6 +17,30 @@ UsersScores.getAll = result => {
     });
 };
 
+UsersScores.getContentMeanScore = (content_id, result) => {
+    let query = `
+    SELECT 
+        contents.id, 
+        CAST ( COALESCE( mean_calculate.users_mean_score, 0 ) AS double precision ) as users_mean_score
+    FROM contents
+    LEFT JOIN 
+        (  
+            SELECT content_id, ROUND(AVG(score)::numeric,1) AS users_mean_score
+            FROM users_scores
+            GROUP BY content_id
+        ) as mean_calculate
+    ON contents.id = mean_calculate.content_id
+    WHERE contents.id = ${content_id}
+    `;
+
+    db.query(query, (err, res) => {
+        if (err)
+            result(null, err);
+
+        result(null, res.rows);
+    });
+};
+
 UsersScores.getOne = (user_id, content_id, result) => {
     let query = `SELECT * FROM users_scores WHERE user_id = ${user_id} AND content_id = ${content_id}`;
 
