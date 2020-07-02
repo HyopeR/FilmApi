@@ -17,6 +17,90 @@ UsersRooms.getAll = result => {
     });
 };
 
+UsersRooms.getOneRoomUsers = (room_id, result) => {
+    let query = `
+    SELECT 
+        rooms.id,
+        rooms.name,
+        array_agg( json_build_object(
+                            'id', users.id,
+                            'username', users.username,
+                            'name', users.name,
+                            'surname', users.surname,
+                            'authority', users_rooms.authority,
+                            'joined_at', users_rooms.created_at
+        ) ORDER BY users.id ASC ) as user_list
+        
+        FROM rooms
+        
+        LEFT JOIN users_rooms
+        ON rooms.id = users_rooms.room_id
+        
+        LEFT JOIN users
+        ON users_rooms.user_id = users.id
+        
+        WHERE rooms.id = ${room_id}
+        
+        GROUP BY 
+            rooms.id, 
+            rooms.name,
+            rooms.active,
+            rooms.created_at
+        
+        ORDER BY rooms.id
+    `;
+
+    db.query(query, (err, res) => {
+        if (err)
+            result(null, err);
+
+        if(res.rowCount > 0)
+            result(null, res.rows[0]);
+        else
+            result(null, { notification: 'Not available ID.' });
+    });
+};
+
+UsersRooms.getOneUserRooms = (user_id, result) => {
+    let query = `
+    SELECT
+        users.id,
+        users.username,
+        array_agg(
+            json_build_object(
+                'id', rooms.id,
+                'name', rooms.name,
+                'authority', users_rooms.authority,
+                'joined_at', users_rooms.created_at
+            ) ORDER BY rooms.id ASC 
+        ) as rooms
+        
+        FROM users
+        
+        LEFT JOIN users_rooms
+        ON users.id = users_rooms.user_id
+        
+        LEFT JOIN rooms
+        ON users_rooms.room_id = rooms.id
+        
+        WHERE users.id IN (SELECT user_id FROM users_rooms)
+        AND users.id = ${user_id}
+        
+        GROUP BY users.id
+        ORDER BY users.id
+    `;
+
+    db.query(query, (err, res) => {
+        if (err)
+            result(null, err);
+
+        if(res.rowCount > 0)
+            result(null, res.rows[0]);
+        else
+            result(null, { notification: 'Not available ID.' });
+    });
+};
+
 UsersRooms.getOne = (user_id, room_id, result) => {
     let query = `SELECT * FROM users_rooms WHERE user_id = ${user_id} AND room_id = ${room_id}`;
 

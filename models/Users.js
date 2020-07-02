@@ -19,7 +19,8 @@ const getQueryRoofDynamic = (parameterString) => {
         users.active,
         users.created_at,
         COALESCE( lists, ARRAY[]::json[] ) as lists,
-        COALESCE( friends, ARRAY[]::json[] ) as friends
+        COALESCE( friends, ARRAY[]::json[] ) as friends,
+        COALESCE( rooms, ARRAY[]::json[] ) as rooms
     FROM users
     LEFT JOIN 
     (
@@ -134,6 +135,34 @@ const getQueryRoofDynamic = (parameterString) => {
 
     ) AS friends
     ON users.id = friends.id
+    
+    LEFT JOIN
+    (
+    SELECT
+        users.id,
+        array_agg(
+            json_build_object(
+                'id', rooms.id,
+                'name', rooms.name,
+                'authority', users_rooms.authority,
+                'joined_at', users_rooms.created_at
+            ) ORDER BY rooms.id ASC 
+        ) as rooms
+        
+        FROM users
+        
+        LEFT JOIN users_rooms
+        ON users.id = users_rooms.user_id
+        
+        LEFT JOIN rooms
+        ON users_rooms.room_id = rooms.id
+        
+        WHERE users.id IN (SELECT user_id FROM users_rooms)
+        
+        GROUP BY users.id
+        ORDER BY users.id
+    ) AS rooms
+    ON users.id = rooms.id
     `
         +
         parameterString

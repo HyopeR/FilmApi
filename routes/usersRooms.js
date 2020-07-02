@@ -13,6 +13,29 @@ router.get('/', (req, res, next) => {
     })
 });
 
+/* GET all room in users list */
+router.get('/userlist/:room_id', (req, res, next) => {
+    const room_id = req.params.room_id;
+
+    UsersRooms.getOneRoomUsers(room_id,(error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
+
+/* GET all user in rooms list */
+router.get('/roomlist/:user_id', (req, res, next) => {
+    const user_id = req.params.user_id;
+
+    UsersRooms.getOneUserRooms(user_id,(error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
 
 /* GET by id users room row */
 router.get('/:user_id/:room_id', (req, res, next) => {
