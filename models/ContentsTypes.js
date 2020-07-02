@@ -20,7 +20,7 @@ ContentsTypes.getOne = (content_type_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -34,7 +34,7 @@ ContentsTypes.create = (newContentType, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -47,7 +47,7 @@ ContentsTypes.update = (content_type_id, newContentType, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -61,7 +61,7 @@ ContentsTypes.delete = (content_type_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deletion failed.' });

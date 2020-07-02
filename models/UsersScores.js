@@ -48,7 +48,7 @@ UsersScores.getOne = (user_id, content_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -66,7 +66,7 @@ UsersScores.create = (newUserScore, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -86,7 +86,7 @@ UsersScores.update = (user_id, content_id, updateUserScore, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -100,7 +100,7 @@ UsersScores.delete = (user_id, content_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deleted failed.' });

@@ -93,7 +93,7 @@ UsersLists.getOne = (user_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -111,7 +111,7 @@ UsersLists.create = (newUserList, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -125,7 +125,7 @@ UsersLists.delete = (user_id, content_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deletion failed.' });

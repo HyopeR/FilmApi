@@ -20,7 +20,7 @@ Categories.getOne = (category_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -34,7 +34,7 @@ Categories.create = (newCategory, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -47,7 +47,7 @@ Categories.update = (category_id, newCategory, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -61,7 +61,7 @@ Categories.delete = (category_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deletion failed.' });

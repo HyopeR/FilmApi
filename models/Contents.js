@@ -170,7 +170,7 @@ Contents.getOne = (content_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -185,7 +185,7 @@ Contents.getFilterType = (content_type_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows);
         else
             result(null, { notification: 'Not available ID.' });
@@ -200,7 +200,7 @@ Contents.getFilterCategory = (category_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows);
         else
             result(null, { notification: 'Not available ID.' });
@@ -217,7 +217,7 @@ Contents.getFilterSpecial = (content_type_id, category_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows);
         else
             result(null, { notification: 'Not available ID.' });
@@ -235,7 +235,7 @@ Contents.create = (newContent, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -257,7 +257,7 @@ Contents.update = (content_id, newContent, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -273,7 +273,7 @@ Contents.deactivate = (content_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deactivated failed.' });

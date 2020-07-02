@@ -29,7 +29,10 @@ UsersComments.getAllContentDetailComments = (content_detail_id, result) => {
         if (err)
             result(null, err);
 
-        result(null, res.rows);
+        if(res.rowCount > 0)
+            result(null, res.rows);
+        else
+            result(null, { notification: 'This content has no comments yet.' });
     });
 };
 
@@ -40,7 +43,7 @@ UsersComments.getOne = (user_comment_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -58,7 +61,7 @@ UsersComments.create = (newUserComment, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -78,7 +81,7 @@ UsersComments.update = (user_comment_id, updateUserComment, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -92,7 +95,7 @@ UsersComments.delete = (user_comment_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deleted failed.' });

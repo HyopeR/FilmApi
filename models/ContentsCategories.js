@@ -8,12 +8,12 @@ let ContentsCategories = function(content_id, category_id){
 ContentsCategories.getAll = result => {
     let query = `SELECT
         puppet_contents_category.content_id,
+        contents.tr_name,
+        contents.eng_name,
         array_agg( json_build_object ( 
             'category_id', categories.id,
             'category_name', categories.name 
-        )) as categories,
-        contents.tr_name,
-        contents.eng_name
+        )) as categories
 
     FROM contents
         LEFT JOIN  (SELECT *
@@ -39,12 +39,12 @@ ContentsCategories.getAll = result => {
 ContentsCategories.getOne = (content_id, result) => {
     let query = `SELECT
         puppet_contents_category.content_id,
+        contents.tr_name,
+        contents.eng_name,
         array_agg( json_build_object ( 
             'category_id', categories.id,
             'category_name', categories.name 
-        )) as categories,
-        contents.tr_name,
-        contents.eng_name
+        )) as categories
 
     FROM contents
         LEFT JOIN  (SELECT *
@@ -65,7 +65,7 @@ ContentsCategories.getOne = (content_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -83,7 +83,7 @@ ContentsCategories.create = (newContentCategory, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -102,7 +102,7 @@ ContentsCategories.update = (param_content_id, param_category_id, newContentCate
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -118,7 +118,7 @@ ContentsCategories.delete = (param_content_id, param_category_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deletion failed.' });

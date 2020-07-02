@@ -129,8 +129,9 @@ Friends.getOne = (requester_id, recipient_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
+
         else
             result(null, { notification: 'Not available ID.' });
     });
@@ -147,7 +148,7 @@ Friends.create = (newFriend, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -168,7 +169,7 @@ Friends.update = (requester_id, recipient_id, updateFriend, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -183,7 +184,7 @@ Friends.delete = (requester_id, recipient_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deletion failed.' });

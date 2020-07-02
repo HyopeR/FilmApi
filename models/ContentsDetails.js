@@ -53,7 +53,7 @@ ContentsDetails.getOne = (content_detail_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Not available ID.' });
@@ -61,33 +61,63 @@ ContentsDetails.getOne = (content_detail_id, result) => {
 };
 
 ContentsDetails.getOneContents = (content_id, result) => {
-    let query = `SELECT series_season, contents_details.content_id, contents.tr_name, contents.eng_name,
-        array_agg( json_build_object(
-            'content_detail_id', contents_details.id,
-            'series_id', series_id,
-            'url', url,
-            'episode_number', episode_number,
-            'tr_episode_name', tr_episode_name,
-            'eng_episode_name', eng_episode_name,
-            'time', time,
-            'intro_start_time', intro_start_time,
-            'intro_finish_time', intro_finish_time,
-            'created_at', contents_details.created_at
-        )) as episodes
+    let query = `
+    SELECT 
+        contents.id,
+        contents.tr_name,
+        contents.eng_name,
+        json_object_agg ( 
+            COALESCE( puppet_contents_details.series_season, 0), 
+            puppet_contents_details.episodes 
+        ) as episodes
         
+    FROM contents
+    LEFT JOIN
+    (
+        SELECT contents_details.content_id, puppet_series.series_season,
+            array_agg( json_build_object(
+                'content_detail_id', contents_details.id,
+                'series_id', series_id,
+                'url', url,
+                'episode_number', episode_number,
+                'tr_episode_name', tr_episode_name,
+                'eng_episode_name', eng_episode_name,
+                'time', time,
+                'intro_start_time', intro_start_time,
+                'intro_finish_time', intro_finish_time,
+                'created_at', contents_details.created_at
+            ) ORDER BY episode_number ASC ) as episodes
+                
         FROM contents_details
-        LEFT JOIN (SELECT * FROM series ORDER BY series_season, episode_number) as puppet_series
+        LEFT JOIN 
+        (
+            SELECT * 
+            FROM series 
+            ORDER BY content_id, series_season, episode_number ASC
+        ) as puppet_series
+
         ON contents_details.series_id = puppet_series.id
-        LEFT JOIN contents
-        ON contents_details.content_id = contents.id
-        
-        WHERE contents_details.content_id = ${content_id}
-        GROUP BY puppet_series.series_season, contents_details.content_id, contents.tr_name, contents.eng_name`;
+        GROUP BY 
+            contents_details.content_id,
+            puppet_series.series_season
+
+        ORDER BY
+            puppet_series.series_season ASC
+            
+    ) AS puppet_contents_details
+    ON contents.id = puppet_contents_details.content_id
+
+    WHERE contents.id = ${content_id}
+    GROUP BY
+        contents.id,
+        contents.tr_name,
+        contents.eng_name
+    `;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows);
         else
             result(null, { notification: 'Not available ID.' });
@@ -105,7 +135,7 @@ ContentsDetails.create = (newContentDetail, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Adding failed.' });
@@ -128,7 +158,7 @@ ContentsDetails.update = (content_detail_id, newContentDetail, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Update failed.' });
@@ -142,7 +172,7 @@ ContentsDetails.delete = (content_detail_id, result) => {
         if (err)
             result(null, err);
 
-        if(res.rows.length > 0)
+        if(res.rowCount > 0)
             result(null, res.rows[0]);
         else
             result(null, { notification: 'Deletion failed.' });
