@@ -16,6 +16,7 @@ const getQueryRoofDynamic = (parameterString) => {
         contents.tr_name,
         contents.eng_name,
         contents.imdb_score,
+        mean_score.users_mean_score,
         contents.active,
         contents.created_at,
         puppet_episodes.episodes,
@@ -127,6 +128,22 @@ const getQueryRoofDynamic = (parameterString) => {
             contents.created_at
         ) AS puppet_categories
     ON contents.id = puppet_categories.id
+    
+    LEFT JOIN
+    (
+        SELECT 
+            contents.id, 
+            CAST ( COALESCE( mean_calculate.users_mean_score, 0 ) AS double precision ) as users_mean_score
+        FROM contents
+        LEFT JOIN 
+            (  
+                SELECT content_id, ROUND(AVG(score)::numeric,1) AS users_mean_score
+                FROM users_scores
+                GROUP BY content_id
+            ) as mean_calculate
+        ON contents.id = mean_calculate.content_id
+    ) AS mean_score
+    ON contents.id = mean_score.id
     
     LEFT JOIN contents_types
     ON contents.type_id = contents_types.id
