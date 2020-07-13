@@ -23,10 +23,12 @@ router.get('/', (req, res, next) => {
     })
 });
 
-/* GET by id activity */
-router.get('/:activity_id', (req, res, next) => {
-    const activity_id = req.params.activity_id;
-    Activities.getOne(activity_id, (error, result) => {
+/* GET by id user_id and content_detail_id one activity get page */
+router.get('/:user_id/:content_detail_id', (req, res, next) => {
+    const user_id = req.params.user_id;
+    const content_detail_id = req.params.content_detail_id;
+
+    Activities.getOne(user_id, content_detail_id, (error, result) => {
         if(error)
             res.json(error);
         else
@@ -78,5 +80,32 @@ router.delete('/:activity_id', (req, res, next) => {
             res.json(result);
     })
 });
+
+/* Filter friend activity list scores get method */
+router.get('/scores/:user_id/:limit_number', (req, res, next) => {
+    const user_id = req.params.user_id;
+    const limit_number = req.params.limit_number;
+
+    Activities.getAllFilterScores(user_id, limit_number,(error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
+
+/* Filter friend activity list comments get method */
+router.get('/comments/:user_id/:limit_number', (req, res, next) => {
+    const user_id = req.params.user_id;
+    const limit_number = req.params.limit_number;
+
+    Activities.getAllFilterComments(user_id, limit_number,(error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    })
+});
+
 
 module.exports = router;

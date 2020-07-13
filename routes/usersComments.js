@@ -14,10 +14,11 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET by content_detail_id all comments */
-router.get('/content/detail/:content_detail_id', (req, res, next) => {
+router.get('/content/detail/:content_detail_id/:limit_number', (req, res, next) => {
     const content_detail_id = req.params.content_detail_id;
+    const limit_number = req.params.limit_number;
 
-    UsersComments.getAllContentDetailComments(content_detail_id, (error, result) => {
+    UsersComments.getAllContentDetailComments(content_detail_id, limit_number, (error, result) => {
         if(error)
             res.json(error);
         else

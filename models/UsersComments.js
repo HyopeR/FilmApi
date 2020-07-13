@@ -17,12 +17,30 @@ UsersComments.getAll = result => {
     });
 };
 
-UsersComments.getAllContentDetailComments = (content_detail_id, result) => {
+UsersComments.getAllContentDetailComments = (content_detail_id, limit_number, result) => {
     let query = `
-        SELECT *
-        FROM users_comments
-        WHERE users_comments.content_detail_id = ${content_detail_id}
-        ORDER BY content_detail_id, users_comments.created_at
+    SELECT 
+        users_comments.id,
+        users_comments.user_id,
+        users_comments.content_detail_id,
+        users_comments.detail,
+        users_comments.created_at,
+        users_comments.updated_at,
+        users.username,
+        users.name,
+        contents_details.content_id
+    FROM users_comments
+    
+    LEFT JOIN users
+    ON users_comments.user_id = users.id
+    
+    LEFT JOIN contents_details
+    ON users_comments.content_detail_id = contents_details.id
+    
+    WHERE contents_details.id = ${content_detail_id}
+    
+    ORDER BY users_comments.created_at DESC
+    LIMIT ${limit_number}
     `;
 
     db.query(query, (err, res) => {

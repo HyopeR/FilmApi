@@ -22,14 +22,16 @@ const contentsRouter = require('./routes/contents');
 const seriesRouter = require('./routes/series');
 
 const usersListsRouter = require('./routes/usersLists');
-const usersRooms = require('./routes/usersRooms');
-const usersScores = require('./routes/usersScores');
-const usersComments = require('./routes/usersComments');
-const usersActivities = require('./routes/usersActivities');
+const usersRoomsRouter = require('./routes/usersRooms');
+const usersScoresRouter = require('./routes/usersScores');
+const usersCommentsRouter = require('./routes/usersComments');
+const usersActivitiesRouter = require('./routes/usersActivities');
 const usersRouter = require('./routes/users');
 
-const friendsRouter = require('./routes/friends');
+const roomsActivitiesRouter = require('./routes/roomsActivities');
 const roomsRouter = require('./routes/rooms');
+
+const friendsRouter = require('./routes/friends');
 const activitiesRouter = require('./routes/activities');
 
 const app = express();
@@ -54,14 +56,16 @@ app.use('/contents', contentsRouter);
 app.use('/series', seriesRouter);
 
 app.use('/users/lists', usersListsRouter);
-app.use('/users/rooms', usersRooms);
-app.use('/users/scores', usersScores);
-app.use('/users/comments', usersComments);
-app.use('/users/activities', usersActivities);
+app.use('/users/rooms', usersRoomsRouter);
+app.use('/users/scores', usersScoresRouter);
+app.use('/users/comments', usersCommentsRouter);
+app.use('/users/activities', usersActivitiesRouter);
 app.use('/users', usersRouter);
 
-app.use('/friends', friendsRouter);
+app.use('/rooms/activities', roomsActivitiesRouter);
 app.use('/rooms', roomsRouter);
+
+app.use('/friends', friendsRouter);
 app.use('/activities', activitiesRouter);
 
 // catch 404 and forward to error handler
