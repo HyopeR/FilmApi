@@ -34,6 +34,8 @@ const roomsRouter = require('./routes/rooms');
 const friendsRouter = require('./routes/friends');
 const activitiesRouter = require('./routes/activities');
 
+const servicesRouter = require('./routes/services');
+
 const app = express();
 
 // view engine setup
@@ -67,6 +69,8 @@ app.use('/rooms', roomsRouter);
 
 app.use('/friends', friendsRouter);
 app.use('/activities', activitiesRouter);
+
+app.use('/services', servicesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
