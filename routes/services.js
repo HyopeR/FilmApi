@@ -3,8 +3,22 @@ const router = express.Router();
 
 const Services = require('../helpers/Services');
 
+/* Services end points */
+router.get('/', (req, res, next) => {
+    res.json(
+        {
+            vidmoly: {
+                end_point: '/video/vidmoly',
+                request_type: 'post',
+                post_variable: 'url',
+                response_variable: 'mp4'
+            }
+        }
+    );
+});
+
 /* GET mp4 videos */
-router.post('/video', (req, res, next) => {
+router.post('/video/vidmoly', (req, res, next) => {
 
     const { url } = req.body;
     Services.getMp4(url, (error, result) => {
@@ -14,7 +28,6 @@ router.post('/video', (req, res, next) => {
             res.json(result);
         }
     })
-
 
 });
 

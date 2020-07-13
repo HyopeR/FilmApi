@@ -35,6 +35,7 @@ const friendsRouter = require('./routes/friends');
 const activitiesRouter = require('./routes/activities');
 
 const servicesRouter = require('./routes/services');
+const authenticationRouter = require('./routes/authentication');
 
 const app = express();
 
@@ -71,6 +72,7 @@ app.use('/friends', friendsRouter);
 app.use('/activities', activitiesRouter);
 
 app.use('/services', servicesRouter);
+app.use('/authentication', authenticationRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

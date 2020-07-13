@@ -11,13 +11,15 @@ Services.getMp4 = async(url, result) => {
         let finishChar = data.search("bitrate");
         let filterResult = data.substring(startChar + 9, finishChar - 6);
 
+        //Sources in filter.
         if(filterResult.search("m3u8") !== -1) {
             filterResult = filterResult.substring(filterResult.search("m3u8") + 7,  finishChar)
         }
+
+        //Sources finish between bitrate filter.
         if(filterResult.search("image") !== -1){
             filterResult = filterResult.substring(0, filterResult.search("image") - 6)
         }
-
         filterResult = filterResult.split(",");
 
         let resultObject = {};
