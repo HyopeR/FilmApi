@@ -1,5 +1,8 @@
 const db = require('../helpers/db');
 
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 let Users = function(username, name, surname, email, password, active = true){
     this.username = username;
     this.name = name;
@@ -13,6 +16,7 @@ const getQueryRoofDynamic = (parameterString) => {
     let createdQuery = `SELECT 
         users.id,
         users.username,
+        users.email,
         users.name,
         users.surname,
         users.password,
@@ -215,16 +219,19 @@ Users.create = (newUser, result) => {
     let query = `INSERT INTO users (username, name, surname, email, password, active) 
     VALUES( $1, $2, $3, $4, $5, $6 ) RETURNING *`;
 
-    const { username, name, surname, email, password, active } = newUser;
+    let { username, name, surname, email, password, active } = newUser;
+    bcrypt.hash(password, 10).then((hash) => {
 
-    db.query(query, [username, name, surname, email, password, active], (err, res) => {
-        if (err)
-            result(null, err);
+        db.query(query, [username, name, surname, email, hash, active], (err, res) => {
+            if (err)
+                result(null, err);
 
-        if(res.rowCount > 0)
-            result(null, res.rows[0]);
-        else
-            result(null, { notification: 'Adding failed.' });
+            if(res.rowCount > 0)
+                result(null, res.rows[0]);
+            else
+                result(null, { notification: 'Adding failed.' });
+        });
+
     });
 };
 
@@ -238,22 +245,26 @@ Users.update = (user_id, newUser, result) => {
         active = $6
     WHERE id = ${user_id} RETURNING *`;
 
-    const { username, name, surname, email, password, active } = newUser;
+    let { username, name, surname, email, password, active } = newUser;
 
-    db.query(query, [username, name, surname, email, password, active], (err, res) => {
-        if (err)
-            result(null, err);
+    bcrypt.hash(password, 10).then((hash) => {
 
-        if(res.rowCount > 0)
-            result(null, res.rows[0]);
-        else
-            result(null, { notification: 'Update failed.' });
+        db.query(query, [username, name, surname, email, hash, active], (err, res) => {
+            if (err)
+                result(null, err);
+
+            if(res.rowCount > 0)
+                result(null, res.rows[0]);
+            else
+                result(null, { notification: 'Update failed.' });
+
+        });
 
     });
 };
 
 Users.deactivate = (user_id, result) => {
-    let query = `UPDATE users 
+    let query = `UPDATE users
     SET active = false
     WHERE id = ${user_id} RETURNING *`;
     db.query(query, (err, res) => {

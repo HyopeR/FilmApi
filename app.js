@@ -8,11 +8,9 @@ const logger = require('morgan');
 const dotenv = require('dotenv');
 dotenv.config();
 
-//DB
-const db = require('./helpers/db');
-db.connect();
-
 const indexRouter = require('./routes/index');
+const authenticationRouter = require('./routes/authentication');
+
 const categoriesRouter = require('./routes/categories');
 
 const contentsCategoriesRouter = require('./routes/contentsCategories');
@@ -35,9 +33,19 @@ const friendsRouter = require('./routes/friends');
 const activitiesRouter = require('./routes/activities');
 
 const servicesRouter = require('./routes/services');
-const authenticationRouter = require('./routes/authentication');
 
 const app = express();
+
+//DB
+const db = require('./helpers/db');
+db.connect();
+
+// Config
+const config = require('./config');
+app.set('api_secret_key', config.api_secret_key); //Global kullanıma izin verme.
+
+// Middleware
+const verifyToken = require('./middleware/verify-token');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,29 +58,30 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/categories', categoriesRouter);
-
-app.use('/contents/categories', contentsCategoriesRouter);
-app.use('/contents/types', contentsTypesRouter);
-app.use('/contents/details', contentsDetailsRouter);
-app.use('/contents', contentsRouter);
-app.use('/series', seriesRouter);
-
-app.use('/users/lists', usersListsRouter);
-app.use('/users/rooms', usersRoomsRouter);
-app.use('/users/scores', usersScoresRouter);
-app.use('/users/comments', usersCommentsRouter);
-app.use('/users/activities', usersActivitiesRouter);
-app.use('/users', usersRouter);
-
-app.use('/rooms/activities', roomsActivitiesRouter);
-app.use('/rooms', roomsRouter);
-
-app.use('/friends', friendsRouter);
-app.use('/activities', activitiesRouter);
-
-app.use('/services', servicesRouter);
 app.use('/authentication', authenticationRouter);
+app.use('/api', verifyToken);
+app.use('/api/categories', categoriesRouter);
+
+app.use('/api/contents/categories', contentsCategoriesRouter);
+app.use('/api/contents/types', contentsTypesRouter);
+app.use('/api/contents/details', contentsDetailsRouter);
+app.use('/api/contents', contentsRouter);
+app.use('/api/series', seriesRouter);
+
+app.use('/api/users/lists', usersListsRouter);
+app.use('/api/users/rooms', usersRoomsRouter);
+app.use('/api/users/scores', usersScoresRouter);
+app.use('/api/users/comments', usersCommentsRouter);
+app.use('/api/users/activities', usersActivitiesRouter);
+app.use('/api/users', usersRouter);
+
+app.use('/api/rooms/activities', roomsActivitiesRouter);
+app.use('/api/rooms', roomsRouter);
+
+app.use('/api/friends', friendsRouter);
+app.use('/api/activities', activitiesRouter);
+
+app.use('/api/services', servicesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

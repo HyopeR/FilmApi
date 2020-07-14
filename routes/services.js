@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Services = require('../helpers/Services');
+const Services = require('../helpers/services');
 
 /* Services end points */
 router.get('/', (req, res, next) => {
