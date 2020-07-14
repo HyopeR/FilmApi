@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
                 end_point: '/login',
                 request_type: 'post',
                 post_variable: 'username, password',
-                response_variable: 'encrypted key'
+                response_variable: 'x-access-token'
             }
         }
     );
@@ -35,7 +35,7 @@ router.post('/login', (req, res, next) => {
             const token = jwt.sign(payload, req.app.get('api_secret_key'), {
                 expiresIn: 720 // 12 saat.
             });
-            res.json(token);
+            res.json({status: result.status, token});
         } else {
             res.json(result);
         }

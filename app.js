@@ -58,8 +58,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/authentication', authenticationRouter);
 app.use('/api', verifyToken);
+
+app.use('/authentication', authenticationRouter);
 app.use('/api/categories', categoriesRouter);
 
 app.use('/api/contents/categories', contentsCategoriesRouter);

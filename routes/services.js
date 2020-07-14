@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 router.post('/video/vidmoly', (req, res, next) => {
 
     const { url } = req.body;
-    Services.getMp4(url, (error, result) => {
+    Services.getVidmolyMp4(url, (error, result) => {
         if(error)
             res.json(error);
         else {

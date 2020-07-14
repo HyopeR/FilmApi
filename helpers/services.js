@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 let Services = function(){};
 
-Services.getMp4 = async(url, result) => {
+Services.getVidmolyMp4 = async(url, result) => {
 
     const getPageData = await fetch(url);
     getPageData.text().then(data => {
