@@ -43,7 +43,18 @@ Node.js Film Api
 | Route | HTTP Verb	 | POST body	 | Description	 |
 | --- | --- | --- | --- |
 | /api/contents/categories | `GET` | Empty | Tüm contents categoryleri listele. |
-| /api/contents/categories/:content_id | `GET` | Empty | content_id'sine göre contents categoryleri getir. (Content kayıtlarının category listesinin ayrıca getirilmesi.) |
+| /api/contents/categories/:content_id | `GET` | Empty | content_id'sine göre contents categoryleri getir. (Content kayıtlarının categories listesinin ayrıca getirilmesi.) |
 | /api/contents/categories | `POST` | { content_id: 1, category_id: 1 } | Yeni bir contents categories oluştur. |
 | /api/contents/categories/:content_id/:category_id | `PUT` | { content_id: 1, category_id: 1 } | Bir contents categoryi güncelle. |
 | /api/contents/categories/:content_id/:category_id | `DELETE` | Empty | Bir contents categoryi sil. |
+
+# Contents Details
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/contents/details | `GET` | Empty | Tüm contents detailleri listele. |
+| /api/contents/details/:content_detail_id | `GET` | Empty | content_detail_id'sine göre contents detail getir. |
+| /api/contents/details/series/:content_id | `GET` | Empty | content_id'sine göre tüm episodeleri gruplu getir. (Content kayıtlarının episodes listesinin ayrıca getirilmesi.) |
+| /api/contents/details | `POST` | { content_id: 1, series_id: 1, url: "vidmoly url", time: "1.58.23", intro_start_time: "0.30", intro_finish_time: "2.00" } | Yeni bir contents detail oluştur. |
+| /api/contents/details/:content_detail_id | `PUT` | { content_id: 1, series_id: 1, url: "vidmoly url", time: "1.58.23", intro_start_time: "0.30", intro_finish_time: "2.00" } | Bir contents detaili güncelle. |
+| /api/contents/details/:content_detail_id | `DELETE` | Empty | Bir contents detaili sil. |
