@@ -23,3 +23,17 @@ Node.js Film Api
 | /api/categories | `POST` | { name: "Aksiyon" } | Yeni bir category oluştur. |
 | /api/categories/:category_id | `PUT` | { name: "Aksiyon" } | Bir categoryi güncelle. |
 | /api/categories/:category_id | `DELETE` | Empty | Bir categoryi kaydı sil. |
+
+# Contents
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/contents | `GET` | Empty | Tüm contentleri listele. |
+| /api/contents/active | `GET` | Empty | Tüm aktif contentleri listele. |
+| /api/contents/:content_id | `GET` | Empty | Id'sine göre content getir. |
+| /api/contents/change/type/:content_type_id | `GET` | Empty | Content typelarına göre contentlerini listele. (Dizi, Film) |
+| /api/contents/change/category/:category_id | `GET` | Empty | Belirli bir categorydeki contentleri listele. (Macera, Aksiyon vs.) |
+| /api/contents/change/special/:content_type_id/:category_id | `GET` | Empty | Content type ve categorylere göre contentleri listele. (Dizi-Aksiyon, Film-Dram vs.) |
+| /api/contents | `POST` | { type_id: 1, tr_name: "Anything", eng_name: "Anything", imdb_score: 8.8, active: true } | Yeni bir content oluştur. |
+| /api/contents/:content_id | `PUT` | { type_id: 1, tr_name: "Anything", eng_name: "Anything", imdb_score: 8.8, active: true } | Bir contenti güncelle. |
+| /api/contents/:content_id | `DELETE` | Empty | Bir contenti deaktif et. |
