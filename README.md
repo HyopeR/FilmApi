@@ -58,3 +58,13 @@ Node.js Film Api
 | /api/contents/details | `POST` | { content_id: 1, series_id: 1, url: "vidmoly url", time: "1.58.23", intro_start_time: "0.30", intro_finish_time: "2.00" } | Yeni bir contents detail oluştur. |
 | /api/contents/details/:content_detail_id | `PUT` | { content_id: 1, series_id: 1, url: "vidmoly url", time: "1.58.23", intro_start_time: "0.30", intro_finish_time: "2.00" } | Bir contents detaili güncelle. |
 | /api/contents/details/:content_detail_id | `DELETE` | Empty | Bir contents detaili sil. |
+
+# Contents Types
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/contents/types | `GET` | Empty | Tüm contents typesleri listele. |
+| /api/contents/types/:content_type_id | `GET` | Empty | Id'sine göre contents typeyi getir. |
+| /api/contents/types | `POST` | { type_name: "Dizi" } | Yeni bir contents type oluştur. |
+| /api/contents/types/:content_type_id | `PUT` | { type_name: "Dizi" } | Bir contents typeyi güncelle. |
+| /api/contents/types/:content_type_id | `DELETE` | Empty | Bir contents typeyi sil. |
