@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET all active activities */
-router.get('/', (req, res, next) => {
+router.get('/active', (req, res, next) => {
     Activities.getAllActive((error, result) => {
         if(error)
             res.json(error);
