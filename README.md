@@ -37,3 +37,13 @@ Node.js Film Api
 | /api/contents | `POST` | { type_id: 1, tr_name: "Anything", eng_name: "Anything", imdb_score: 8.8, active: true } | Yeni bir content oluştur. |
 | /api/contents/:content_id | `PUT` | { type_id: 1, tr_name: "Anything", eng_name: "Anything", imdb_score: 8.8, active: true } | Bir contenti güncelle. |
 | /api/contents/:content_id | `DELETE` | Empty | Bir contenti deaktif et. |
+
+# Contents Categories
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/contents/categories | `GET` | Empty | Tüm contents categoryleri listele. |
+| /api/contents/categories/:content_id | `GET` | Empty | content_id'sine göre contents categoryleri getir. (Content kayıtlarının category listesinin ayrıca getirilmesi.) |
+| /api/contents/categories | `POST` | { content_id: 1, category_id: 1 } | Yeni bir contents categories oluştur. |
+| /api/contents/categories/:content_id/:category_id | `PUT` | { content_id: 1, category_id: 1 } | Bir contents categoryi güncelle. |
+| /api/contents/categories/:content_id/:category_id | `DELETE` | Empty | Bir contents categoryi sil. |
