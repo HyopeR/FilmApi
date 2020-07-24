@@ -13,3 +13,13 @@ Node.js Film Api
 | /api/activities/:activity_id | `DELETE` | Empty | Bir activityi deaktif et. |
 | /api/activities/scores/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content scorelarını listele. (Önce yeniler) |
 | /api/activities/comments/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content commentslerini listele. (Önce yeniler) |
+
+# Categories
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/categories | `GET` | Empty | Tüm categoryleri listele. |
+| /api/categories/:category_id | `GET` | Empty | Id'sine göre category getir. |
+| /api/categories | `POST` | { name: "Aksiyon" } | Yeni bir category oluştur. |
+| /api/categories/:category_id | `PUT` | { name: "Aksiyon" } | Bir categoryi güncelle. |
+| /api/categories/:category_id | `DELETE` | Empty | Bir categoryi kaydı sil. |
