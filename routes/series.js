@@ -15,9 +15,9 @@ router.get('/', (req, res, next) => {
 
 
 /* GET by id series */
-router.get('/:id', (req, res, next) => {
-    const content_type_id = req.params.id;
-    Series.getOne(content_type_id, (error, result) => {
+router.get('/:series_id', (req, res, next) => {
+    const series_id = req.params.series_id;
+    Series.getOne(series_id, (error, result) => {
         if(error)
             res.json(error);
         else
@@ -65,8 +65,8 @@ router.post('/', (req, res, next) => {
 });
 
 /* Update series */
-router.put('/:id', (req, res, next) => {
-    const series_id = req.params.id;
+router.put('/:series_id', (req, res, next) => {
+    const series_id = req.params.series_id;
     const { content_id, series_season, tr_episode_name, eng_episode_name, episode_number } = req.body;
     const newEpisode = new Series(content_id, series_season, tr_episode_name, eng_episode_name, episode_number);
 
@@ -79,8 +79,8 @@ router.put('/:id', (req, res, next) => {
 });
 
 /* Delete series */
-router.delete('/:id', (req, res, next) => {
-    const series_id = req.params.id;
+router.delete('/:series_id', (req, res, next) => {
+    const series_id = req.params.series_id;
     Series.delete(series_id, (error, result) => {
         if(error)
             res.json(error);

@@ -37,7 +37,10 @@ UsersScores.getContentMeanScore = (content_id, result) => {
         if (err)
             result(null, err);
 
-        result(null, res.rows);
+        if(res.rowCount > 0)
+            result(null, res.rows[0]);
+        else
+            result(null, { notification: 'Content not found.' });
     });
 };
 

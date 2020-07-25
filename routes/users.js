@@ -24,8 +24,8 @@ router.get('/active', (req, res, next) => {
 });
 
 /* GET by id user */
-router.get('/:id', (req, res, next) => {
-    const user_id = req.params.id;
+router.get('/:user_id', (req, res, next) => {
+    const user_id = req.params.user_id;
 
     Users.getOne(user_id, (error, result) => {
         if(error)
@@ -49,8 +49,8 @@ router.post('/', (req, res, next) => {
 });
 
 /* Update user */
-router.put('/:id', (req, res, next) => {
-    const user_id = req.params.id;
+router.put('/:user_id', (req, res, next) => {
+    const user_id = req.params.user_id;
     const { username, name, surname, email, password, active } = req.body;
     const newUser = new Users(username, name, surname, email, password, active);
 
@@ -63,8 +63,8 @@ router.put('/:id', (req, res, next) => {
 });
 
 /* Deactivate User */
-router.delete('/:id', (req, res, next) => {
-    const user_id = req.params.id;
+router.delete('/:user_id', (req, res, next) => {
+    const user_id = req.params.user_id;
 
     Users.deactivate(user_id, (error, result) => {
         if(error)

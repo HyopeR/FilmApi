@@ -52,8 +52,8 @@ router.get('/:user_id/:room_id', (req, res, next) => {
 
 /* Create users room */
 router.post('/', (req, res, next) => {
-    const { user_id, room_id } = req.body;
-    const newUserRoom = new UsersRooms(user_id, room_id);
+    const { user_id, room_id, authority } = req.body;
+    const newUserRoom = new UsersRooms(user_id, room_id, authority);
 
     UsersRooms.create(newUserRoom, (error, result) => {
         if(error)
