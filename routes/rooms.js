@@ -13,7 +13,6 @@ router.get('/', (req, res, next) => {
     })
 });
 
-
 /* GET by id room */
 router.get('/:room_id', (req, res, next) => {
     const room_id = req.params.room_id;

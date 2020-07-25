@@ -68,3 +68,14 @@ Node.js Film Api
 | /api/contents/types | `POST` | { type_name: "Dizi" } | Yeni bir contents type oluştur. |
 | /api/contents/types/:content_type_id | `PUT` | { type_name: "Dizi" } | Bir contents typeyi güncelle. |
 | /api/contents/types/:content_type_id | `DELETE` | Empty | Bir contents typeyi sil. |
+
+# Friends
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/friends | `GET` | Empty | Tüm friendsleri listele. |
+| /api/friends/user/:user_id | `GET` | Empty | user_id'sine göre tüm friendleri ve diğer talepleri getir. (User kayıtlarının friends, sent_wait, receive_wait listelerinin ayrıca getirilmesi.) |
+| /api/friends/:requester_id/:recipient_id | `GET` | Empty | İki user arasıdaki friend kaydını getir. |
+| /api/friends | `POST` | { requester_id: 1, recipient_id: 2, status: 0 } | Friend isteği yollama. |
+| /api/friends/:requester_id/:recipient_id | `PUT` | { status: 1 } | Friend onaylama. |
+| /api/friends/:requester_id/:recipient_id | `DELETE` | Empty | Friend reddetme. |
