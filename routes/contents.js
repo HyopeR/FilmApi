@@ -25,9 +25,9 @@ router.get('/active', (req, res, next) => {
 
 
 /* GET by id content */
-router.get('/:id', (req, res, next) => {
+router.get('/:content_id', (req, res, next) => {
 
-    const content_id = req.params.id;
+    const content_id = req.params.content_id;
     Contents.getOne(content_id, (error, result) => {
         if(error)
             res.json(error);
@@ -93,8 +93,8 @@ router.post('/', (req, res, next) => {
 });
 
 /* Update content */
-router.put('/:id', (req, res, next) => {
-    const content_id = req.params.id;
+router.put('/:content_id', (req, res, next) => {
+    const content_id = req.params.content_id;
     const { type_id, tr_name, eng_name, imdb_score, active } = req.body;
     const newContent = new Contents(type_id, tr_name, eng_name, imdb_score, active);
 
@@ -107,8 +107,8 @@ router.put('/:id', (req, res, next) => {
 });
 
 /* Deactivate content */
-router.delete('/:id', (req, res, next) => {
-    const content_id = req.params.id;
+router.delete('/:content_id', (req, res, next) => {
+    const content_id = req.params.content_id;
     Contents.deactivate(content_id, (error, result) => {
         if(error)
             res.json(error);

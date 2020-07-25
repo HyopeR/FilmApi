@@ -24,6 +24,8 @@ const getQueryRoofDynamic = (parameterString) => {
         users.created_at,
         COALESCE( lists, ARRAY[]::json[] ) as lists,
         COALESCE( friends, ARRAY[]::json[] ) as friends,
+        COALESCE( sent_wait, ARRAY[]::json[] ) as sent_wait,
+        COALESCE( receive_wait, ARRAY[]::json[] ) as receive_wait,
         COALESCE( rooms, ARRAY[]::json[] ) as rooms
     FROM users
     LEFT JOIN 
@@ -57,85 +59,196 @@ const getQueryRoofDynamic = (parameterString) => {
     
     LEFT JOIN
     (
-        SELECT 
-            users.id,
-            array_agg(friends.friend) as friends
-            FROM users
+        
+        SELECT
+        users.id,
+        friends,
+        sent_wait,
+        receive_wait
+FROM users
 
+    LEFT JOIN
+(
+SELECT 
+    users.id,
+    detailed_friends_list.who,
+    array_agg(
+        json_build_object(
+                'id', detailed_friends_list.friend_id,
+                'username', detailed_friends_list.username,
+                'name', detailed_friends_list.name,
+                'surname', detailed_friends_list.surname,
+                'email', detailed_friends_list.email
+        ) ORDER BY detailed_friends_list.friend_id ASC
+    ) as friends
+    FROM users
+
+    LEFT JOIN
+    (
+        SELECT 
+        friend_data.id,
+            friend_data.friend_id,
+            users.username,
+            users.name,
+            users.surname,
+            users.email,
+            friend_data.status,
+            friend_data.who
+
+        FROM users    
         LEFT JOIN
         (
-            SELECT 
+            SELECT
                 users.id,
-                CASE
-                    WHEN users.id = friend_selector.requester_id THEN friend_selector.recipient_user
-                    WHEN users.id = friend_selector.recipient_id THEN friend_selector.requester_user
+            CASE
+                WHEN users.id = requester_id THEN recipient_id
+                WHEN users.id = recipient_id THEN requester_id
+                END AS friend_id,
+            status,
+            CASE
+                WHEN (status = 1) THEN 'friend'
+                WHEN (status = 0) AND (users.id = requester_id) THEN 'requester'
+                WHEN (status = 0) AND (users.id = recipient_id) THEN 'recipient'
+                END AS who
+            FROM users
 
-                END AS friend FROM users
+            LEFT JOIN friends
+            ON friends.requester_id = users.id OR friends.recipient_id = users.id
 
-                LEFT JOIN (
+            WHERE (users.id IN (SELECT requester_id FROM friends) OR users.id IN (SELECT recipient_id FROM friends))
+            AND users.active = true
+        ) AS friend_data
+        ON users.id = friend_data.friend_id
+    ) AS detailed_friends_list
+    ON detailed_friends_list.id = users.id
 
-                SELECT 
-                    friends.id,
-                    friends.requester_id,
-                    friends.recipient_id,
-                    friends.status,
-                    friends.created_at,
-                    friends.updated_at,
-                    requester.requester_user,
-                    recipient.recipient_user
-                FROM friends
+    WHERE users.active = true AND detailed_friends_list.who IS NOT null AND who = 'friend'
+    GROUP BY users.id, detailed_friends_list.status, detailed_friends_list.who
+    ORDER BY users.id
+) AS friends
+ON friends.id = users.id
 
-                LEFT JOIN
-                (
-                    SELECT 
-                        friends.id,
-                        json_build_object(
-                            'id', users_puppet.id,
-                            'username', users_puppet.username,
-                            'name', users_puppet.name,
-                            'surname', users_puppet.surname,
-                            'email', users_puppet.email
-                        ) as requester_user
+LEFT JOIN
+(
+SELECT 
+    users.id,
+    detailed_friends_list.who,
+    array_agg(
+        json_build_object(
+                'id', detailed_friends_list.friend_id,
+                'username', detailed_friends_list.username,
+                'name', detailed_friends_list.name,
+                'surname', detailed_friends_list.surname,
+                'email', detailed_friends_list.email
+        ) ORDER BY detailed_friends_list.friend_id ASC
+    ) as sent_wait
+    FROM users
 
-                    FROM friends
-                    LEFT JOIN (SELECT * FROM users WHERE users.active = true) as users_puppet
-                    ON users_puppet.id = requester_id
-                    ORDER BY friends.id
-                ) AS requester
-                ON friends.id = requester.id
+    LEFT JOIN
+    (
+        SELECT 
+        friend_data.id,
+            friend_data.friend_id,
+            users.username,
+            users.name,
+            users.surname,
+            users.email,
+            friend_data.status,
+            friend_data.who
 
-            LEFT JOIN
-            (
-                SELECT 
-                    friends.id,
-                    json_build_object(
-                        'id', users_puppet.id,
-                        'username', users_puppet.username,
-                        'name', users_puppet.name,
-                        'surname', users_puppet.surname,
-                        'email', users_puppet.email
-                    ) as recipient_user
-    
-                    FROM friends
-                    LEFT JOIN (SELECT * FROM users WHERE users.active = true) as users_puppet
-                    ON users_puppet.id = recipient_id
-                    ORDER BY friends.id
-                ) AS recipient
-                ON friends.id = recipient.id
-                
-                WHERE friends.status = 1
+        FROM users    
+        LEFT JOIN
+        (
+            SELECT
+                users.id,
+            CASE
+                WHEN users.id = requester_id THEN recipient_id
+                WHEN users.id = recipient_id THEN requester_id
+                END AS friend_id,
+            status,
+            CASE
+                WHEN (status = 1) THEN 'friend'
+                WHEN (status = 0) AND (users.id = requester_id) THEN 'requester'
+                WHEN (status = 0) AND (users.id = recipient_id) THEN 'recipient'
+                END AS who
+            FROM users
 
-            ) AS friend_selector
-            ON friend_selector.requester_id = users.id OR friend_selector.recipient_id = users.id
-            WHERE ( 
-                users.id IN (SELECT requester_id FROM friends)
-                OR users.id IN (SELECT recipient_id FROM friends) 
-               )
-        ) AS friends
-        ON friends.id = users.id
-        WHERE users.id IN (friends.id)
-        GROUP BY users.id
-        ORDER BY users.id
+            LEFT JOIN friends
+            ON friends.requester_id = users.id OR friends.recipient_id = users.id
+
+            WHERE (users.id IN (SELECT requester_id FROM friends) OR users.id IN (SELECT recipient_id FROM friends))
+            AND users.active = true
+        ) AS friend_data
+        ON users.id = friend_data.friend_id
+    ) AS detailed_friends_list
+    ON detailed_friends_list.id = users.id
+
+    WHERE users.active = true AND detailed_friends_list.who IS NOT null AND who = 'requester'
+    GROUP BY users.id, detailed_friends_list.status, detailed_friends_list.who
+    ORDER BY users.id
+) AS sent_wait
+ON sent_wait.id = users.id
+
+LEFT JOIN
+(
+SELECT 
+    users.id,
+    detailed_friends_list.who,
+    array_agg(
+        json_build_object(
+                'id', detailed_friends_list.friend_id,
+                'username', detailed_friends_list.username,
+                'name', detailed_friends_list.name,
+                'surname', detailed_friends_list.surname,
+                'email', detailed_friends_list.email
+        ) ORDER BY detailed_friends_list.friend_id ASC
+    ) as receive_wait
+    FROM users
+
+    LEFT JOIN
+    (
+        SELECT 
+        friend_data.id,
+            friend_data.friend_id,
+            users.username,
+            users.name,
+            users.surname,
+            users.email,
+            friend_data.status,
+            friend_data.who
+
+        FROM users    
+        LEFT JOIN
+        (
+            SELECT
+                users.id,
+            CASE
+                WHEN users.id = requester_id THEN recipient_id
+                WHEN users.id = recipient_id THEN requester_id
+                END AS friend_id,
+            status,
+            CASE
+                WHEN (status = 1) THEN 'friend'
+                WHEN (status = 0) AND (users.id = requester_id) THEN 'requester'
+                WHEN (status = 0) AND (users.id = recipient_id) THEN 'recipient'
+                END AS who
+            FROM users
+
+            LEFT JOIN friends
+            ON friends.requester_id = users.id OR friends.recipient_id = users.id
+
+            WHERE (users.id IN (SELECT requester_id FROM friends) OR users.id IN (SELECT recipient_id FROM friends))
+            AND users.active = true
+        ) AS friend_data
+        ON users.id = friend_data.friend_id
+    ) AS detailed_friends_list
+    ON detailed_friends_list.id = users.id
+
+    WHERE users.active = true AND detailed_friends_list.who IS NOT null AND who = 'recipient'
+    GROUP BY users.id, detailed_friends_list.status, detailed_friends_list.who
+    ORDER BY users.id
+) AS receive_wait
+ON receive_wait.id = users.id
 
     ) AS friends
     ON users.id = friends.id

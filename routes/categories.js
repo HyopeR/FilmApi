@@ -14,8 +14,8 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET by id categories */
-router.get('/:id', (req, res, next) => {
-    const category_id = req.params.id;
+router.get('/:category_id', (req, res, next) => {
+    const category_id = req.params.category_id;
     Categories.getOne(category_id, (error, result) => {
         if(error)
             res.json(error);
@@ -38,8 +38,8 @@ router.post('/', (req, res, next) => {
 });
 
 /* Update categories */
-router.put('/:id', (req, res, next) => {
-    const category_id = req.params.id;
+router.put('/:category_id', (req, res, next) => {
+    const category_id = req.params.category_id;
     const { name } = req.body;
     const newCategory = new Categories(name);
 
@@ -52,8 +52,8 @@ router.put('/:id', (req, res, next) => {
 });
 
 /* Delete categories */
-router.delete('/:id', (req, res, next) => {
-    const category_id = req.params.id;
+router.delete('/:category_id', (req, res, next) => {
+    const category_id = req.params.category_id;
     Categories.delete(category_id, (error, result) => {
         if(error)
             res.json(error);

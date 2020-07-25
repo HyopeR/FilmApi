@@ -15,8 +15,8 @@ router.get('/', (req, res, next) => {
 
 
 /* GET by id content type */
-router.get('/:id', (req, res, next) => {
-    const content_type_id = req.params.id;
+router.get('/:content_type_id', (req, res, next) => {
+    const content_type_id = req.params.content_type_id;
     ContentsTypes.getOne(content_type_id, (error, result) => {
         if(error)
             res.json(error);
@@ -39,8 +39,8 @@ router.post('/', (req, res, next) => {
 });
 
 /* Update content type */
-router.put('/:id', (req, res, next) => {
-    const content_type_id = req.params.id;
+router.put('/:content_type_id', (req, res, next) => {
+    const content_type_id = req.params.content_type_id;
     const { type_name } = req.body;
     const newContentType = new ContentsTypes(type_name);
 
@@ -53,8 +53,8 @@ router.put('/:id', (req, res, next) => {
 });
 
 /* Delete content type */
-router.delete('/:id', (req, res, next) => {
-    const content_type_id = req.params.id;
+router.delete('/:content_type_id', (req, res, next) => {
+    const content_type_id = req.params.content_type_id;
     ContentsTypes.delete(content_type_id, (error, result) => {
         if(error)
             res.json(error);

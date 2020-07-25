@@ -55,7 +55,7 @@ router.put('/:requester_id/:recipient_id', (req, res, next) => {
     const requester_id = req.params.requester_id;
     const recipient_id = req.params.recipient_id;
 
-    // status, created_at = updateFriend
+    // status, updated_at = updateFriend
     const updateFriend = req.body;
     updateFriend['updated_at'] = new Date().toISOString();
 
