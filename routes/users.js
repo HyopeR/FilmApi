@@ -35,19 +35,6 @@ router.get('/:user_id', (req, res, next) => {
     })
 });
 
-/* Create user */
-router.post('/', (req, res, next) => {
-    const { username, name, surname, email, password, active } = req.body;
-    const newUser = new Users(username, name, surname, email, password, active);
-
-    Users.create(newUser, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
-});
-
 /* Update user */
 router.put('/:user_id', (req, res, next) => {
     const user_id = req.params.user_id;

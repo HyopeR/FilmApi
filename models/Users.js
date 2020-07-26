@@ -327,27 +327,6 @@ Users.getOne = (user_id, result) => {
     });
 };
 
-Users.create = (newUser, result) => {
-
-    let query = `INSERT INTO users (username, name, surname, email, password, active) 
-    VALUES( $1, $2, $3, $4, $5, $6 ) RETURNING *`;
-
-    let { username, name, surname, email, password, active } = newUser;
-    bcrypt.hash(password, 10).then((hash) => {
-
-        db.query(query, [username, name, surname, email, hash, active], (err, res) => {
-            if (err)
-                result(null, err);
-
-            if(res.rowCount > 0)
-                result(null, res.rows[0]);
-            else
-                result(null, { notification: 'Adding failed.' });
-        });
-
-    });
-};
-
 Users.update = (user_id, newUser, result) => {
     let query = `UPDATE users 
     SET username = $1, 

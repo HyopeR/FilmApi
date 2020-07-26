@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const Authentication = require('../helpers/authentication');
+const Register = require('../helpers/register');
 
 /* Services end points */
 router.get('/', (req, res, next) => {
@@ -14,8 +15,14 @@ router.get('/', (req, res, next) => {
                 request_type: 'post',
                 post_variable: 'username, password',
                 response_variable: 'x-access-token'
+            },
+            register: {
+                end_point: '/register',
+                request_type: 'post',
+                post_variable: 'username, name, surname, email, password, active',
+                response_variable: 'user record data'
             }
-        }
+        },
     );
 });
 
@@ -41,6 +48,33 @@ router.post('/login', (req, res, next) => {
         }
     })
 
+});
+
+/* Register User */
+router.post('/register', (req, res, next) => {
+    const { username, name, surname, email, password, active } = req.body;
+
+    let verification;
+    let splitEmail = email.split('@')[1];
+    const permittedEmails = ['gmail.com', 'hotmail.com', 'outlook.com'];
+
+    if (permittedEmails.includes(splitEmail))
+        verification = true;
+    else
+        verification = false;
+
+    if (verification) {
+        const newUser = new Register(username, name, surname, email, password, active);
+
+        Register.register(newUser, (error, result) => {
+            if(error)
+                res.json(error);
+            else
+                res.json(result);
+        })
+    } else {
+        res.json({notification: 'Permitted e-mail addresses; `gmail.com` or `hotmail.com`'});
+    }
 });
 
 module.exports = router;

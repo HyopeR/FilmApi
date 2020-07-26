@@ -12,8 +12,6 @@ Authentication.login = (username, password, result) => {
 
         if (res.rowCount > 0) {
 
-            console.log(res.rows[0].password)
-
             bcrypt.compare(password, res.rows[0].password)
                 .then((verification) => {
                     if(!verification)

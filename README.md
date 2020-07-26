@@ -14,6 +14,14 @@ Node.js Film Api
 | /api/activities/scores/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content scorelarını listele. (Önce yeniler) |
 | /api/activities/comments/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content commentslerini listele. (Önce yeniler) |
 
+# Authentication
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/authentication | `GET` | Empty | Tüm users scoreları listele. |
+| /api/authentication/login | `POST` | { username: 'Frog', password: 'FrogGuard' } | Üye girişi ve token alma. |
+| /api/authentication/register | `POST` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Üye kaydı gerçekleştire. |
+
 # Categories
 
 | Route | HTTP Verb	 | POST body	 | Description	 |
@@ -117,7 +125,6 @@ Node.js Film Api
 | /api/users | `GET` | Empty | Tüm userları listele. |
 | /api/users/active | `GET` | Empty | Tüm aktif userları listele. |
 | /api/users/:user_id | `GET` | Empty | Id'sine göre user getir. |
-| /api/users | `POST` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Bir user oluştur. |
 | /api/users/:user_id | `PUT` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Bir user düzenle. |
 | /api/users/:user_id | `DELETE` | Empty | Bir useri deaktif et. |
 
