@@ -1,6 +1,14 @@
 # FilmApi
 Node.js Film Api
 
+# Authentication
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /authentication | `GET` | Empty | Authentication end pointlerini getir. |
+| /authentication/login | `POST` | { username: 'Frog', password: 'FrogGuard' } | Üye girişi ve token alma. |
+| /authentication/register | `POST` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Üye kaydı gerçekleştire. |
+
 # Activities
 
 | Route | HTTP Verb	 | POST body	 | Description	 |
@@ -13,14 +21,6 @@ Node.js Film Api
 | /api/activities/:activity_id | `DELETE` | Empty | Bir activityi deaktif et. |
 | /api/activities/scores/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content scorelarını listele. (Önce yeniler) |
 | /api/activities/comments/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content commentslerini listele. (Önce yeniler) |
-
-# Authentication
-
-| Route | HTTP Verb	 | POST body	 | Description	 |
-| --- | --- | --- | --- |
-| /api/authentication | `GET` | Empty | Tüm users scoreları listele. |
-| /api/authentication/login | `POST` | { username: 'Frog', password: 'FrogGuard' } | Üye girişi ve token alma. |
-| /api/authentication/register | `POST` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Üye kaydı gerçekleştire. |
 
 # Categories
 
