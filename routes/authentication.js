@@ -26,6 +26,17 @@ router.get('/', (req, res, next) => {
     );
 });
 
+/* add new colon */
+router.post('/add', (req, res, next) => {
+
+    Authentication.add((error, result) => {
+        if(error)
+            res.json(error);
+        else
+            res.json(result);
+    });
+});
+
 /* User login */
 router.post('/login', (req, res, next) => {
 

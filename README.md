@@ -49,8 +49,8 @@ Node.js Film Api
 | /api/contents/change/type/:content_type_id | `GET` | Empty | Content typelarına göre contentlerini listele. (Dizi, Film) |
 | /api/contents/change/category/:category_id | `GET` | Empty | Belirli bir categorydeki contentleri listele. (Macera, Aksiyon vs.) |
 | /api/contents/change/special/:content_type_id/:category_id | `GET` | Empty | Content type ve categorylere göre contentleri listele. (Dizi-Aksiyon, Film-Dram vs.) |
-| /api/contents | `POST` | { type_id: 1, tr_name: 'Bir şey', eng_name: 'Anything', imdb_score: 8.8, active: true } | Yeni bir content oluştur. |
-| /api/contents/:content_id | `PUT` | { type_id: 1, tr_name: 'Bir şey', eng_name: 'Anything', imdb_score: 8.8, active: true } | Bir contenti güncelle. |
+| /api/contents | `POST` | { type_id: 1, tr_name: 'Bir şey', eng_name: 'Anything', imdb_score: 8.8, poster_url: 'jpg poster url', active: true } | Yeni bir content oluştur. |
+| /api/contents/:content_id | `PUT` | { type_id: 1, tr_name: 'Bir şey', eng_name: 'Anything', imdb_score: 8.8, poster_url: 'jpg poster url', active: true } | Bir contenti güncelle. |
 | /api/contents/:content_id | `DELETE` | Empty | Bir contenti deaktif et. |
 
 # Contents Categories

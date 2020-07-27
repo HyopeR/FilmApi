@@ -81,8 +81,8 @@ router.get('/change/special/:content_type_id/:category_id', (req, res, next) => 
 
 /* Create content */
 router.post('/', (req, res, next) => {
-    const { type_id, tr_name, eng_name, imdb_score, active } = req.body;
-    const newContent = new Contents(type_id, tr_name, eng_name, imdb_score, active);
+    const { type_id, tr_name, eng_name, imdb_score, poster_url, active } = req.body;
+    const newContent = new Contents(type_id, tr_name, eng_name, imdb_score, poster_url, active);
 
     Contents.create(newContent, (error, result) => {
         if(error)
@@ -95,8 +95,8 @@ router.post('/', (req, res, next) => {
 /* Update content */
 router.put('/:content_id', (req, res, next) => {
     const content_id = req.params.content_id;
-    const { type_id, tr_name, eng_name, imdb_score, active } = req.body;
-    const newContent = new Contents(type_id, tr_name, eng_name, imdb_score, active);
+    const { type_id, tr_name, eng_name, imdb_score, poster_url, active } = req.body;
+    const newContent = new Contents(type_id, tr_name, eng_name, imdb_score, poster_url, active);
 
     Contents.update(content_id, newContent, (error, result) => {
         if(error)

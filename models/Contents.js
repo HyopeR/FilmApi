@@ -1,10 +1,11 @@
 const db = require('../helpers/db');
 
-let Contents = function(type_id, tr_name, eng_name, imdb_score, active = true){
+let Contents = function(type_id, tr_name, eng_name, imdb_score, poster_url, active = true){
     this.type_id = type_id;
     this.tr_name = tr_name;
     this.eng_name = eng_name;
     this.imdb_score = imdb_score;
+    this.poster_url = poster_url;
     this.active = active;
 };
 
@@ -16,6 +17,7 @@ const getQueryRoofDynamic = (parameterString) => {
         contents.tr_name,
         contents.eng_name,
         contents.imdb_score,
+        contents.poster_url,
         mean_score.users_mean_score,
         contents.active,
         contents.created_at,
@@ -244,11 +246,11 @@ Contents.getFilterSpecial = (content_type_id, category_id, result) => {
 Contents.create = (newContent, result) => {
 
     let query = `INSERT INTO 
-    contents (type_id, tr_name, eng_name, imdb_score, active) 
-    VALUES( $1, $2, $3, $4, $5 ) RETURNING *`;
-    const { type_id, tr_name, eng_name, imdb_score, active } = newContent;
+    contents (type_id, tr_name, eng_name, imdb_score, poster_url, active) 
+    VALUES( $1, $2, $3, $4, $5, $6 ) RETURNING *`;
+    const { type_id, tr_name, eng_name, imdb_score, poster_url, active } = newContent;
 
-    db.query(query, [type_id, tr_name, eng_name, imdb_score, active], (err, res) => {
+    db.query(query, [type_id, tr_name, eng_name, imdb_score, poster_url, active], (err, res) => {
         if (err)
             result(null, err);
 
@@ -265,12 +267,13 @@ Contents.update = (content_id, newContent, result) => {
         tr_name = $2, 
         eng_name = $3, 
         imdb_score = $4, 
-        active = $5
+        poster_url = $5,
+        active = $6
     WHERE id = ${content_id} RETURNING *`;
 
-    const { type_id, tr_name, eng_name, imdb_score, active } = newContent;
+    const { type_id, tr_name, eng_name, imdb_score, poster_url, active } = newContent;
 
-    db.query(query, [type_id, tr_name, eng_name, imdb_score, active], (err, res) => {
+    db.query(query, [type_id, tr_name, eng_name, imdb_score, poster_url, active], (err, res) => {
         if (err)
             result(null, err);
 

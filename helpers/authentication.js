@@ -25,4 +25,16 @@ Authentication.login = (username, password, result) => {
     });
 };
 
+Authentication.add = (result) => {
+    let query = `ALTER TABLE contents
+    ADD COLUMN poster_url VARCHAR (255) DEFAULT NULL`;
+
+    db.query(query, (err, res) => {
+        if (err)
+            result(null, err);
+
+        result(null, res.rows)
+    });
+};
+
 module.exports= Authentication;
