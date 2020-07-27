@@ -98,17 +98,18 @@ Activities.create = (newActivity, result) => {
 
 Activities.update = (activity_id, updateActivity, result) => {
     let query = `UPDATE activities 
-    SET activity_start = $1 ,
-        activity_finish = $2,
-        activity_score = $3,
-        activity_comment = $4,
-        activity_passing_time = $5,
-        updated_at = $6
+    SET is_one = $1,
+        activity_start = $2,
+        activity_finish = $3,
+        activity_score = $4,
+        activity_comment = $5,
+        activity_passing_time = $6,
+        updated_at = $7
     WHERE id = ${activity_id} RETURNING *`;
 
-    const { activity_start, activity_finish, activity_score, activity_comment, activity_passing_time, updated_at } = updateActivity;
+    const { is_one, activity_start, activity_finish, activity_score, activity_comment, activity_passing_time, updated_at } = updateActivity;
 
-    db.query(query, [activity_start, activity_finish, activity_score, activity_comment, activity_passing_time, updated_at], (err, res) => {
+    db.query(query, [is_one, activity_start, activity_finish, activity_score, activity_comment, activity_passing_time, updated_at], (err, res) => {
         if (err)
             result(null, err);
 

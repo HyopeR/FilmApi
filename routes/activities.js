@@ -52,8 +52,9 @@ router.post('/', (req, res, next) => {
 /* Update activity */
 router.put('/:activity_id', (req, res, next) => {
     const activity_id = req.params.activity_id;
-    const { activity_start, activity_finish, activity_score, activity_comment, activity_passing_time } = req.body;
+    const { is_one, activity_start, activity_finish, activity_score, activity_comment, activity_passing_time } = req.body;
     const updateActivity = {
+        is_one: is_one,
         activity_start: activity_start,
         activity_finish: activity_finish,
         activity_score: activity_score,
