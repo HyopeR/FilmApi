@@ -9,6 +9,13 @@ Node.js Film Api
 | /authentication/login | `POST` | { username: 'Frog', password: 'FrogGuard' } | Üye girişi ve token alma. |
 | /authentication/register | `POST` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Üye kaydı gerçekleştire. |
 
+# Services
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/services | `GET` | Empty | Services end pointlerini getir. |
+| /api/services/video/vidmoly | `POST` | { url: 'vidmoly url' } | Mp4 dosyalarını getir. |
+
 # Activities
 
 | Route | HTTP Verb	 | POST body	 | Description	 |
