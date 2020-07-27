@@ -7,7 +7,7 @@ let Friends = function(requester_id, recipient_id, status = 0){
 };
 
 Friends.getAll = result => {
-    let query = `SELECT * FROM friends`;
+    let query = `SELECT * FROM friends ORDER BY id`;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -220,9 +220,9 @@ Friends.getAllOneUserFriends = (user_id, result) => {
 };
 
 
-Friends.getOne = (requester_id, recipient_id, result) => {
+Friends.getOne = (friend_record_id, result) => {
     let query = `SELECT * FROM friends 
-    WHERE requester_id = ${requester_id} AND recipient_id = ${recipient_id}`;
+    WHERE id = ${friend_record_id}`;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);
@@ -253,13 +253,13 @@ Friends.create = (newFriend, result) => {
     });
 };
 
-Friends.update = (requester_id, recipient_id, updateFriend, result) => {
+Friends.update = (friend_record_id, updateFriend, result) => {
 
     // status, created_at = updateFriend
     let query = `UPDATE friends 
     SET status = $1,
         updated_at = $2
-    WHERE requester_id = ${requester_id} AND recipient_id = ${recipient_id} RETURNING *`;
+    WHERE id = ${friend_record_id} RETURNING *`;
 
     const {status, updated_at } = updateFriend;
 
@@ -275,9 +275,9 @@ Friends.update = (requester_id, recipient_id, updateFriend, result) => {
     });
 };
 
-Friends.delete = (requester_id, recipient_id, result) => {
+Friends.delete = (friend_record_id, result) => {
     let query = `DELETE FROM friends 
-    WHERE requester_id = ${requester_id} AND recipient_id = ${recipient_id} RETURNING *`;
+    WHERE id = ${friend_record_id} RETURNING *`;
     db.query(query, (err, res) => {
         if (err)
             result(null, err);

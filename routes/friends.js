@@ -25,11 +25,10 @@ router.get('/user/:user_id', (req, res, next) => {
 });
 
 /* GET by requester_id and recipient_id Friends */
-router.get('/:requester_id/:recipient_id', (req, res, next) => {
-    const requester_id = req.params.requester_id;
-    const recipient_id = req.params.recipient_id;
+router.get('/:friend_record_id', (req, res, next) => {
+    const friend_record_id = req.params.friend_record_id;
 
-    Friends.getOne(requester_id, recipient_id, (error, result) => {
+    Friends.getOne(friend_record_id, (error, result) => {
         if(error)
             res.json(error);
         else
@@ -51,15 +50,14 @@ router.post('/', (req, res, next) => {
 });
 
 /* Accept Friend */
-router.put('/:requester_id/:recipient_id', (req, res, next) => {
-    const requester_id = req.params.requester_id;
-    const recipient_id = req.params.recipient_id;
+router.put('/:friend_record_id', (req, res, next) => {
+    const friend_record_id = req.params.friend_record_id;
 
     // status, updated_at = updateFriend
     const updateFriend = req.body;
     updateFriend['updated_at'] = new Date().toISOString();
 
-    Friends.update(requester_id, recipient_id, updateFriend, (error, result) => {
+    Friends.update(friend_record_id, updateFriend, (error, result) => {
         if(error)
             res.json(error);
         else
@@ -68,11 +66,10 @@ router.put('/:requester_id/:recipient_id', (req, res, next) => {
 });
 
 /* Reject Friend */
-router.delete('/:requester_id/:recipient_id', (req, res, next) => {
-    const requester_id = req.params.requester_id;
-    const recipient_id = req.params.recipient_id;
+router.delete('/:friend_record_id', (req, res, next) => {
+    const friend_record_id = req.params.friend_record_id;
 
-    Friends.delete(requester_id, recipient_id, (error, result) => {
+    Friends.delete(friend_record_id, (error, result) => {
         if(error)
             res.json(error);
         else

@@ -39,6 +39,7 @@ const getQueryRoofDynamic = (parameterString) => {
             'type_name', contents_types.type_name,
             'tr_name', contents.tr_name,
             'eng_name', contents.eng_name,
+            'poster_url', contents.poster_url,
             'imdb_score', contents.imdb_score,
             'active', contents.active,
             'created_at', contents.created_at
@@ -74,6 +75,7 @@ SELECT
     detailed_friends_list.who,
     array_agg(
         json_build_object(
+                'friend_record_id', detailed_friends_list.friend_record_id,
                 'id', detailed_friends_list.friend_id,
                 'username', detailed_friends_list.username,
                 'name', detailed_friends_list.name,
@@ -86,6 +88,7 @@ SELECT
     LEFT JOIN
     (
         SELECT 
+        friend_data.friend_record_id,
         friend_data.id,
             friend_data.friend_id,
             users.username,
@@ -99,6 +102,7 @@ SELECT
         LEFT JOIN
         (
             SELECT
+                friends.id AS friend_record_id,
                 users.id,
             CASE
                 WHEN users.id = requester_id THEN recipient_id
@@ -135,6 +139,7 @@ SELECT
     detailed_friends_list.who,
     array_agg(
         json_build_object(
+                'friend_record_id', detailed_friends_list.friend_record_id,
                 'id', detailed_friends_list.friend_id,
                 'username', detailed_friends_list.username,
                 'name', detailed_friends_list.name,
@@ -147,6 +152,7 @@ SELECT
     LEFT JOIN
     (
         SELECT 
+        friend_data.friend_record_id,
         friend_data.id,
             friend_data.friend_id,
             users.username,
@@ -160,6 +166,7 @@ SELECT
         LEFT JOIN
         (
             SELECT
+                friends.id AS friend_record_id,
                 users.id,
             CASE
                 WHEN users.id = requester_id THEN recipient_id
@@ -196,6 +203,7 @@ SELECT
     detailed_friends_list.who,
     array_agg(
         json_build_object(
+                'friend_record_id', detailed_friends_list.friend_record_id,
                 'id', detailed_friends_list.friend_id,
                 'username', detailed_friends_list.username,
                 'name', detailed_friends_list.name,
@@ -208,6 +216,7 @@ SELECT
     LEFT JOIN
     (
         SELECT 
+        friend_data.friend_record_id,
         friend_data.id,
             friend_data.friend_id,
             users.username,
@@ -221,6 +230,7 @@ SELECT
         LEFT JOIN
         (
             SELECT
+                friends.id AS friend_record_id,
                 users.id,
             CASE
                 WHEN users.id = requester_id THEN recipient_id

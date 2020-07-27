@@ -90,10 +90,10 @@ Node.js Film Api
 | --- | --- | --- | --- |
 | /api/friends | `GET` | Empty | Tüm friendsleri listele. |
 | /api/friends/user/:user_id | `GET` | Empty | user_id'sine göre tüm friendleri ve diğer talepleri getir. (User kayıtlarının friends, sent_wait, receive_wait listelerinin ayrıca getirilmesi.) |
-| /api/friends/:requester_id/:recipient_id | `GET` | Empty | İki user arasıdaki friend kaydını getir. |
+| /api/friends/:friend_record_id | `GET` | Empty | İki user arasıdaki friend kaydını friends.id'ye göre getir. |
 | /api/friends | `POST` | { requester_id: 1, recipient_id: 2, status: 0 } | Friend isteği yollama. |
-| /api/friends/:requester_id/:recipient_id | `PUT` | { status: 1 } | Friend onaylama. |
-| /api/friends/:requester_id/:recipient_id | `DELETE` | Empty | Friend reddetme. |
+| /api/friends/:friend_record_id | `PUT` | { status: 1 } | Friend onaylama. |
+| /api/friends/:friend_record_id | `DELETE` | Empty | Friend reddetme. |
 
 # Rooms
 
