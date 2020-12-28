@@ -1,24 +1,10 @@
 const { Sequelize } = require('sequelize');
 
-// const db = new Sequelize(process.env.LOCAL_DB_NAME, process.env.LOCAL_DB_USER, process.env.LOCAL_DB_PASSWORD, {
-//     dialect: 'postgres',
-//     host: process.env.LOCAL_DB_HOST,
-//     port: process.env.LOCAL_DB_PORT,
-//     logging: false,
-// });
-
-const db = new Sequelize(process.env.NETWORK_DB_NAME, process.env.NETWORK_DB_USER, process.env.NETWORK_DB_PASSWORD, {
-  dialect: 'postgres',
-  protocol: 'postgres',
-  dialectOptions: {
-    ssl: {
-      rejectUnauthorized: false
-    }
-  },
-
-  logging: false,
-  host: process.env.NETWORK_DB_HOST,
-  port: process.env.NETWORK_DB_PORT,
+const db = new Sequelize(process.env.LOCAL_DB_NAME, process.env.LOCAL_DB_USER, process.env.LOCAL_DB_PASSWORD, {
+    dialect: 'postgres',
+    host: process.env.LOCAL_DB_HOST,
+    port: process.env.LOCAL_DB_PORT,
+    logging: false,
 });
 
 module.exports = db;
