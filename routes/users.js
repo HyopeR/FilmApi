@@ -1,63 +1,74 @@
 const express = require('express');
 const router = express.Router();
 
-const Users = require('../models/Users');
+const {getAllActiveUser, getAllUser, getOneUser, updateUser, deactivateUser, deleteUser} = require('../controllers/users.controller');
 
 /* GET all users */
-router.get('/', (req, res, next) => {
-    Users.getAll((error, result) => {
+router.get('/', (req, res) => {
+    getAllUser((error = null, result = null) => {
         if(error)
-            res.json(error);
+            res.status(400).json(error);
         else
-            res.json(result);
+            res.status(200).json(result);
     })
 });
 
 /* GET all active users */
-router.get('/active', (req, res, next) => {
-    Users.getAllActive((error, result) => {
+router.get('/active', (req, res) => {
+    getAllActiveUser((error = null, result = null) => {
         if(error)
-            res.json(error);
+            res.status(400).json(error);
         else
-            res.json(result);
+            res.status(200).json(result);
     })
 });
 
 /* GET by id user */
-router.get('/:user_id', (req, res, next) => {
-    const user_id = req.params.user_id;
+router.get('/:user_id', (req, res) => {
+    const {user_id} = req.params;
 
-    Users.getOne(user_id, (error, result) => {
+    getOneUser(user_id, (error = null, result = null) => {
         if(error)
-            res.json(error);
+            res.status(400).json(error);
         else
-            res.json(result);
+            res.status(200).json(result);
     })
 });
 
 /* Update user */
-router.put('/:user_id', (req, res, next) => {
-    const user_id = req.params.user_id;
-    const { username, name, surname, email, password, active } = req.body;
-    const newUser = new Users(username, name, surname, email, password, active);
+router.put('/:user_id', (req, res) => {
+    const {user_id} = req.params;
+    const updateValues = req.body;
 
-    Users.update(user_id, newUser, (error, result) => {
+    updateUser(user_id, updateValues, (error = null, result = null) => {
         if(error)
-            res.json(error);
+            res.status(400).json(error);
         else
-            res.json(result);
+            res.status(200).json(result);
     })
 });
 
 /* Deactivate User */
-router.delete('/:user_id', (req, res, next) => {
-    const user_id = req.params.user_id;
+router.delete('/deactivate/:user_id', (req, res) => {
+    const {user_id} = req.params;
 
-    Users.deactivate(user_id, (error, result) => {
+    deactivateUser(user_id, (error = null, result = null) => {
         if(error)
-            res.json(error);
+            res.status(400).json(error);
         else
-            res.json(result);
+            res.status(200).json(result);
+    })
+});
+
+/* Delete User */
+router.delete('/:user_id', (req, res) => {
+    const {user_id} = req.params;
+
+    deleteUser(user_id, (error = null, result = null) => {
+        if(error)
+            res.status(400).json(error);
+        else
+            res.status(200).json(result);
     })
 });
 

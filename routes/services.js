@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const Services = require('../helpers/services');
+const {getVidmolyMp4} = require('../controllers/services.controller');
 
 /* Services end points */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
     res.json(
         {
             vidmoly: {
@@ -18,15 +18,14 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET mp4 videos */
-router.post('/video/vidmoly', (req, res, next) => {
-
+router.post('/video/vidmoly', (req, res) => {
     const { url } = req.body;
-    Services.getVidmolyMp4(url, (error, result) => {
-        if(error)
-            res.json(error);
-        else {
-            res.json(result);
-        }
+
+    getVidmolyMp4(url, (error = null, result = null) => {
+        if (error)
+            res.status(400).json(error);
+        else
+            res.status(200).json(result);
     })
 
 });

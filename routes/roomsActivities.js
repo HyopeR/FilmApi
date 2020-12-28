@@ -1,43 +1,44 @@
 const express = require('express');
 const router = express.Router();
 
-const RoomsActivities = require('../models/RoomsActivities');
+const {
+  getAllRoomActivity,
+  getOneRoomActivity,
+  createRoomActivity
+} = require('../controllers/roomsActivities.controller');
 
 /* GET all rooms activities */
-router.get('/', (req, res, next) => {
-    RoomsActivities.getAll((error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/', (req, res) => {
+  getAllRoomActivity((error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET one rooms activity */
-router.get('/:room_id/:activity_id', (req, res, next) => {
+router.get('/:room_id/:activity_id', (req, res) => {
+  const {room_id, activity_id} = req.params;
 
-    const room_id = req.params.room_id;
-    const activity_id = req.params.activity_id;
-
-    RoomsActivities.getOne(room_id, activity_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  getOneRoomActivity(room_id, activity_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Create room activity */
-router.post('/', (req, res, next) => {
-    const { room_id, activity_id } = req.body;
-    const newRoomActivity = new RoomsActivities(room_id, activity_id);
+router.post('/', (req, res) => {
+  const newRoomActivity = req.body;
 
-    RoomsActivities.create(newRoomActivity, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  createRoomActivity(newRoomActivity, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 module.exports = router;

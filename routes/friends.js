@@ -1,80 +1,86 @@
 const express = require('express');
 const router = express.Router();
 
-const Friends = require('../models/Friends');
+const {
+  getAllFriend,
+  getAllOneUserFriends,
+  getOneFriend,
+  createFriend,
+  updateFriend,
+  deleteFriend
+} = require('../controllers/friends.controller');
 
 /* GET all Friends */
-router.get('/', (req, res, next) => {
-    Friends.getAll((error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/', (req, res) => {
+  getAllFriend((error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET one user all Friends */
-router.get('/user/:user_id', (req, res, next) => {
-    const user_id = req.params.user_id;
-    Friends.getAllOneUserFriends(user_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/user/:user_id', (req, res) => {
+  const {user_id} = req.params;
+
+  getAllOneUserFriends(user_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET by requester_id and recipient_id Friends */
-router.get('/:friend_record_id', (req, res, next) => {
-    const friend_record_id = req.params.friend_record_id;
+router.get('/:friend_record_id', (req, res) => {
+  const {friend_record_id} = req.params;
 
-    Friends.getOne(friend_record_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  getOneFriend(friend_record_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Add Friend */
-router.post('/', (req, res, next) => {
-    const { requester_id, recipient_id, status } = req.body;
-    const newFriend = new Friends(requester_id, recipient_id, status);
+router.post('/', (req, res) => {
+  const newFriend = req.body;
 
-    Friends.create(newFriend, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  createFriend(newFriend, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Accept Friend */
-router.put('/:friend_record_id', (req, res, next) => {
-    const friend_record_id = req.params.friend_record_id;
+router.put('/:friend_record_id', (req, res) => {
+  const {friend_record_id} = req.params;
 
-    // status, updated_at = updateFriend
-    const updateFriend = req.body;
-    updateFriend['updated_at'] = new Date().toISOString();
+  const updateValues = req.body;
+  updateValues['updated_at'] = new Date().toISOString();
 
-    Friends.update(friend_record_id, updateFriend, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  updateFriend(friend_record_id, updateValues, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Reject Friend */
-router.delete('/:friend_record_id', (req, res, next) => {
-    const friend_record_id = req.params.friend_record_id;
+router.delete('/:friend_record_id', (req, res) => {
+  const {friend_record_id} = req.params;
 
-    Friends.delete(friend_record_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  deleteFriend(friend_record_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 module.exports = router;

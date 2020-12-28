@@ -1,55 +1,57 @@
 const express = require('express');
 const router = express.Router();
 
-const UsersLists = require('../models/UsersLists');
+const {
+  getAllUserList,
+  getOneUserList,
+  addListItem,
+  deleteListItem
+} = require('../controllers/usersLists.controller');
 
 /* GET all users lists */
-router.get('/', (req, res, next) => {
-    UsersLists.getAll((error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/', (req, res) => {
+  getAllUserList((error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET by user_id lists */
-router.get('/:user_id', (req, res, next) => {
+router.get('/:user_id', (req, res) => {
+  const {user_id} = req.params;
 
-    const user_id = req.params.user_id;
-    UsersLists.getOne(user_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  getOneUserList(user_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Create list item */
-router.post('/', (req, res, next) => {
-    const { user_id, content_id } = req.body;
-    const newUserList = new UsersLists(user_id, content_id);
+router.post('/', (req, res) => {
+  const newUserListItem = req.body;
 
-    UsersLists.create(newUserList, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  addListItem(newUserListItem, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Delete list item */
-router.delete('/:user_id/:content_id', (req, res, next) => {
+router.delete('/:user_id/:content_id', (req, res) => {
+  const {user_id, content_id} = req.params;
 
-    const user_id = req.params.user_id;
-    const content_id = req.params.content_id;
-
-    UsersLists.delete(user_id, content_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  deleteListItem(user_id, content_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 module.exports = router;

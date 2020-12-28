@@ -38,7 +38,16 @@ const app = express();
 
 //DB
 const db = require('./helpers/db');
-db.connect();
+// db.connect();
+const controlDb = async () => {
+  try {
+    await db.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+}
+controlDb();
 
 // Config
 const config = require('./config');
@@ -86,6 +95,7 @@ app.use('/api/services', servicesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
+  res.status(404).json({ 'notification': 'Route not found.' })
   next(createError(404));
 });
 

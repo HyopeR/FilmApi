@@ -1,65 +1,84 @@
 const express = require('express');
 const router = express.Router();
 
-const Rooms = require('../models/Rooms');
+const {
+  getAllRoom,
+  getOneRoom,
+  createRoom,
+  updateRoom,
+  deactivateRoom,
+  deleteRoom
+} = require('../controllers/rooms.controller');
 
 /* GET all rooms */
-router.get('/', (req, res, next) => {
-    Rooms.getAll((error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/', (req, res) => {
+  getAllRoom((error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET by id room */
-router.get('/:room_id', (req, res, next) => {
-    const room_id = req.params.room_id;
-    Rooms.getOne(room_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/:room_id', (req, res) => {
+  const {room_id} = req.params;
+
+  getOneRoom(room_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Create room */
-router.post('/', (req, res, next) => {
-    const { name, active } = req.body;
-    const newRoom = new Rooms(name, active);
+router.post('/', (req, res) => {
+  const newRoom = req.body;
 
-    Rooms.create(newRoom, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  createRoom(newRoom, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Update room */
-router.put('/:room_id', (req, res, next) => {
-    const room_id = req.params.room_id;
-    const { name, active } = req.body;
-    const newRoom = new Rooms(name, active);
+router.put('/:room_id', (req, res) => {
+  const {room_id} = req.params;
+  const updateValues = req.body;
 
-    Rooms.update(room_id, newRoom, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  updateRoom(room_id, updateValues, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Deactivate room */
-router.delete('/:room_id', (req, res, next) => {
-    const room_id = req.params.room_id;
-    Rooms.deactivate(room_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.delete('/deactivate/:room_id', (req, res) => {
+  const {room_id} = req.params;
+
+  deactivateRoom(room_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
+});
+
+/* Delete room */
+router.delete('/:room_id', (req, res) => {
+  const {room_id} = req.params;
+
+  deleteRoom(room_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 module.exports = router;

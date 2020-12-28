@@ -1,43 +1,44 @@
 const express = require('express');
 const router = express.Router();
 
-const UsersActivities = require('../models/UsersActivities');
+const {
+  getAllUserActivity,
+  getOneUserActivity,
+  createUserActivity
+} = require('../controllers/usersActivities.controller');
 
 /* GET all users activities */
-router.get('/', (req, res, next) => {
-    UsersActivities.getAll((error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/', (req, res) => {
+  getAllUserActivity((error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET one user ativity */
-router.get('/:user_id/:activity_id', (req, res, next) => {
+router.get('/:user_id/:activity_id', (req, res) => {
+  const {user_id, activity_id} = req.params;
 
-    const user_id = req.params.user_id;
-    const activity_id = req.params.activity_id;
-
-    UsersActivities.getOne(user_id, activity_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  getOneUserActivity(user_id, activity_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Create user activity */
-router.post('/', (req, res, next) => {
-    const { user_id, activity_id } = req.body;
-    const newUserActivity = new UsersActivities(user_id, activity_id);
+router.post('/', (req, res) => {
+  const newUserActivity = req.body;
 
-    UsersActivities.create(newUserActivity, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  createUserActivity(newUserActivity, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 module.exports = router;

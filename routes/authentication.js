@@ -3,78 +3,57 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-const Authentication = require('../helpers/authentication');
-const Register = require('../helpers/register');
+const {userRegister, userLogin} = require('../controllers/authentication.controller');
 
 /* Services end points */
-router.get('/', (req, res, next) => {
-    res.json(
-        {
-            login: {
-                end_point: '/login',
-                request_type: 'post',
-                post_variable: 'username, password',
-                response_variable: 'x-access-token'
-            },
-            register: {
-                end_point: '/register',
-                request_type: 'post',
-                post_variable: 'username, name, surname, email, password, active',
-                response_variable: 'user record data'
-            }
-        },
-    );
+router.get('/', (req, res) => {
+  res.json(
+    {
+      login: {
+        end_point: '/login',
+        request_type: 'post',
+        post_variable: 'username, password',
+        response_variable: 'x-access-token'
+      },
+      register: {
+        end_point: '/register',
+        request_type: 'post',
+        post_variable: 'username, name, surname, email, password, active',
+        response_variable: 'user record data'
+      }
+    },
+  );
 });
 
 /* User login */
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
+  const {username, password} = req.body;
 
-    const { username, password } = req.body;
-
-    Authentication.login( username, password, (error, result) => {
-        if(error)
-            res.json(error);
-
-        if(result.status) {
-            const payload = {
-                username
-            };
-            const token = jwt.sign(payload, req.app.get('api_secret_key'), {
-                expiresIn: 720 // 12 saat.
-            });
-            res.json({status: result.status, token});
-        } else {
-            res.json(result);
-        }
-    })
+  userLogin(username, password, (error, result) => {
+    if (error)
+      res.status(400).json(error);
+    else {
+      const payload = {username};
+      const token = jwt.sign(payload, req.app.get('api_secret_key'), {
+        expiresIn: 720 // 12 saat.
+      });
+      res.status(200).json({status: result.status, token});
+    }
+  })
 
 });
 
 /* Register User */
-router.post('/register', (req, res, next) => {
-    const { username, name, surname, email, password, active } = req.body;
+router.post('/register', (req, res) => {
+  const newUser = req.body;
 
-    let verification;
-    let splitEmail = email.split('@')[1];
-    const permittedEmails = ['gmail.com', 'hotmail.com', 'outlook.com'];
-
-    if (permittedEmails.includes(splitEmail))
-        verification = true;
+  userRegister(newUser, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
     else
-        verification = false;
+      res.status(200).json(result);
+  })
 
-    if (verification) {
-        const newUser = new Register(username, name, surname, email, password, active);
-
-        Register.register(newUser, (error, result) => {
-            if(error)
-                res.json(error);
-            else
-                res.json(result);
-        })
-    } else {
-        res.json({notification: 'Permitted e-mail addresses; `gmail.com` or `hotmail.com`'});
-    }
 });
 
 module.exports = router;

@@ -1,82 +1,86 @@
 const express = require('express');
 const router = express.Router();
 
-const UsersComments = require('../models/UsersComments');
+const {
+  getAllUserComment,
+  getAllContentDetailComments,
+  getOneUserComment,
+  createUserComment,
+  updateUserComment,
+  deleteUserComment
+} = require('../controllers/usersComments.controller');
 
 /* GET all users commets */
-router.get('/', (req, res, next) => {
-    UsersComments.getAll((error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+router.get('/', (req, res) => {
+  getAllUserComment((error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET by content_detail_id all comments */
-router.get('/content/detail/:content_detail_id/:limit_number', (req, res, next) => {
-    const content_detail_id = req.params.content_detail_id;
-    const limit_number = req.params.limit_number;
+router.get('/content/detail/:content_detail_id/:limit_number', (req, res) => {
+  const {content_detail_id, limit_number} = req.params;
 
-    UsersComments.getAllContentDetailComments(content_detail_id, limit_number, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  getAllContentDetailComments(content_detail_id, limit_number, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* GET by id users comment row */
-router.get('/:user_comment_id', (req, res, next) => {
-    const user_comment_id = req.params.user_comment_id;
+router.get('/:user_comment_id', (req, res) => {
+  const {user_comment_id} = req.params;
 
-    UsersComments.getOne(user_comment_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  getOneUserComment(user_comment_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Create users comment */
-router.post('/', (req, res, next) => {
-    const { user_id, content_detail_id, detail } = req.body;
-    const newUserComment = new UsersComments(user_id, content_detail_id, detail);
+router.post('/', (req, res) => {
+  const newUserComment = req.body;
 
-    UsersComments.create(newUserComment, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  createUserComment(newUserComment, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Update users comment detail */
-router.put('/:user_comment_id', (req, res, next) => {
-    const user_comment_id = req.params.user_comment_id;
+router.put('/:user_comment_id', (req, res) => {
+  const {user_comment_id} = req.params;
 
-    const { detail } = req.body;
-    const updateUserComment = { detail: detail };
-    updateUserComment['updated_at'] = new Date().toISOString();
+  const updateValues = req.body;
+  updateValues['updated_at'] = new Date().toISOString();
 
-    UsersComments.update(user_comment_id, updateUserComment, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  updateUserComment(user_comment_id, updateValues, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 /* Delete users comment row */
-router.delete('/:user_comment_id', (req, res, next) => {
-    const user_comment_id = req.params.user_comment_id;
+router.delete('/:user_comment_id', (req, res) => {
+  const {user_comment_id} = req.params;
 
-    UsersComments.delete(user_comment_id, (error, result) => {
-        if(error)
-            res.json(error);
-        else
-            res.json(result);
-    })
+  deleteUserComment(user_comment_id, (error = null, result = null) => {
+    if (error)
+      res.status(400).json(error);
+    else
+      res.status(200).json(result);
+  })
 });
 
 module.exports = router;
