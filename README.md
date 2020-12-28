@@ -25,7 +25,8 @@ Node.js Film Api
 | /api/activities/:user_id/:content_detail_id | `GET` | Empty | Bir kullanıcının, bir contente göre olan activitysini getir. |
 | /api/activities | `POST` | { content_detail_id: 1, is_one: true, activity_start: true, activity_finish: false, activity_score: false, activity_comment: false, activity_passing_time: '15.26', active: true } | Yeni bir activity oluştur. |
 | /api/activities/:activity_id | `PUT` | { activity_start: true, activity_finish: false, activity_score: false, activity_comment: false, activity_passing_time: '15.26' } | Bir activityi güncelle. |
-| /api/activities/:activity_id | `DELETE` | Empty | Bir activityi deaktif et. |
+| /api/activities/deactivate/:activity_id | `DELETE` | Empty | Bir activityi deaktif et. |
+| /api/activities/:activity_id | `DELETE` | Empty | Bir activityi ve tüm alt tablo bağımlılıklarını sil. |
 | /api/activities/scores/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content scorelarını listele. (Önce yeniler) |
 | /api/activities/comments/:user_id/:limit_number | `GET` | Empty | Bir kullanıcının arkadaşlarının content commentslerini listele. (Önce yeniler) |
 
@@ -51,7 +52,8 @@ Node.js Film Api
 | /api/contents/change/special/:content_type_id/:category_id | `GET` | Empty | Content type ve categorylere göre contentleri listele. (Dizi-Aksiyon, Film-Dram vs.) |
 | /api/contents | `POST` | { type_id: 1, tr_name: 'Bir şey', eng_name: 'Anything', imdb_score: 8.8, poster_url: 'jpg poster url', active: true } | Yeni bir content oluştur. |
 | /api/contents/:content_id | `PUT` | { type_id: 1, tr_name: 'Bir şey', eng_name: 'Anything', imdb_score: 8.8, poster_url: 'jpg poster url', active: true } | Bir contenti güncelle. |
-| /api/contents/:content_id | `DELETE` | Empty | Bir contenti deaktif et. |
+| /api/contents/deactivate/:content_id | `DELETE` | Empty | Bir contenti deaktif et. |
+| /api/contents/:content_id | `DELETE` | Empty | Bir contenti ve tüm alt tablo bağımlılıklarını sil. |
 
 # Contents Categories
 
@@ -103,7 +105,8 @@ Node.js Film Api
 | /api/rooms/room_id | `GET` | Empty | Id'sine room kaydı getir. |
 | /api/rooms | `POST` | { name: 'room1', active: true } | Yeni bir room oluştur. |
 | /api/rooms/:room_id | `PUT` | { name: 'room2', active: true } | Bir room'u düzenle. |
-| /api/rooms/:room_id| `DELETE` | Empty | Bir room'u deaktif et. |
+| /api/rooms/deactivate/:room_id| `DELETE` | Empty | Bir room'u deaktif et. |
+| /api/rooms/:room_id | `DELETE` | Empty | Bir room'u ve tüm alt tablo bağımlılıklarını sil. |
 
 # Rooms Activities
 
@@ -133,7 +136,8 @@ Node.js Film Api
 | /api/users/active | `GET` | Empty | Tüm aktif userları listele. |
 | /api/users/:user_id | `GET` | Empty | Id'sine göre user getir. |
 | /api/users/:user_id | `PUT` | { username: 'Frog', name: 'Jack', surname: 'July', email: 'julyjack@gmail.com', password: 'FrogGuard', active: true } | Bir user düzenle. |
-| /api/users/:user_id | `DELETE` | Empty | Bir useri deaktif et. |
+| /api/users/deactivate/:user_id | `DELETE` | Empty | Bir useri deaktif et. |
+| /api/users/:user_id | `DELETE` | Empty | Bir user'ı ve tüm alt tablo bağımlılıklarını sil. |
 
 # Users Activities
 
