@@ -331,7 +331,7 @@ const updateUser = async (user_id, updateValues, result) => {
     updateValues.password = await bcrypt.hash(updateValues.password, 10);
   if(keys.includes('email')) {
     if(!controlEmail(updateValues.email))
-      result({notification: 'Email is invalid.'})
+      return result({notification: 'Email is invalid.'})
   }
 
   Users.update(updateValues, {

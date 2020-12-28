@@ -9,13 +9,13 @@ const userRegister = async (newUser, result) => {
   let keys = lodash.keys(newUser);
 
   if (!keys.includes('username'))
-    result({notification: 'Username is required.'});
+    return result({notification: 'Username is required.'});
   if (!keys.includes('password'))
-    result({notification: 'Password is required.'});
+    return result({notification: 'Password is required.'});
   if (!keys.includes('email'))
-    result({notification: 'Email is required.'});
+    return result({notification: 'Email is required.'});
   if (!controlEmail(newUser.email))
-    result({notification: 'Email is invalid.'});
+    return result({notification: 'Email is invalid.'});
 
   newUser.password = await bcrypt.hash(newUser.password, 10);
 
@@ -24,7 +24,7 @@ const userRegister = async (newUser, result) => {
   })
     .then(user => {
       if (lodash.isEmpty(user))
-        result({notification: 'Adding failed.'});
+        return result({notification: 'Adding failed.'});
       else
         result(null, user)
     })
@@ -32,8 +32,8 @@ const userRegister = async (newUser, result) => {
 };
 
 const userLogin = async (username, password, result) => {
-  if(!username || !password)
-    result({notification: 'Username and password is required.'})
+  if (!username || !password)
+    return result({notification: 'Username and password is required.'})
 
   const queryUser = await Users.findOne({
     type: QueryTypes.SELECT,
@@ -42,12 +42,12 @@ const userLogin = async (username, password, result) => {
     }
   })
 
-  if(lodash.isEmpty(queryUser))
-    result({notification: 'User not found.'});
+  if (lodash.isEmpty(queryUser))
+    return result({notification: 'User not found.'});
 
   const verification = await bcrypt.compare(password, queryUser.password)
   if (!verification)
-    result({notification: 'Password incorrect.'});
+    return result({notification: 'Password incorrect.'});
 
   result(null, queryUser);
 };
