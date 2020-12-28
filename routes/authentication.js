@@ -34,10 +34,11 @@ router.post('/login', (req, res) => {
       res.status(400).json(error);
     else {
       const payload = {username};
-      const token = jwt.sign(payload, req.app.get('api_secret_key'), {
+      jwt.sign(payload, req.app.get('api_secret_key'), {
         expiresIn: 720 // 12 saat.
-      });
-      res.status(200).json({status: result.status, token});
+      })
+        .then(token => res.status(200).json({status: result.status, token}))
+        .catch(err => res.status(400).json(err))
     }
   })
 
