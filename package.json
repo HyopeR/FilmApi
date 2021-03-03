@@ -21,7 +21,7 @@
     "node-fetch": "^2.6.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "pug": "2.0.0-beta11",
+    "pug": "3.0.1",
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
