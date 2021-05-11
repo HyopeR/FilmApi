@@ -16,7 +16,7 @@
     "get-urls": "^9.2.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "morgan": "~1.9.1",
     "node-fetch": "^2.6.0",
     "pg": "^8.5.1",
